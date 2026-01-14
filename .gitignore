@@ -47,3 +47,14 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# R specific
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+
+# System files
+.DS_Store
+Thumbs.db
+
