@@ -3,7 +3,7 @@
 ## Overview
 This project focuses on developing a standardized pipeline to compile, clean, 
 and restructure tuna catch and effort datasets from multiple Regional Fisheries
-Management Organizations (RFMOs).
+Management Organizations (RFMOs). 
 
 ## RFMOs Included
 - **[IATTC](https://www.iattc.org/en-us/Data/Public-domain)** – Inter-American Tropical Tuna Commission data
