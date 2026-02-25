@@ -45,7 +45,7 @@ wcpfc_month_1deg_purseseine_clean <- month_1deg_raw |>
   ) |>
   # Convert SW corner to center
   mutate(
-    lat = parse_and_center(lat1, offset = 0.5),   # Convert SW corner to center
+    lat = parse_and_center(lat1, offset = 0.5),   # Convert corner to center
     lon = parse_and_center(lon1, offset = 0.5),
     effort_set = rowSums(across(
       c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),   # Total sets across all set types

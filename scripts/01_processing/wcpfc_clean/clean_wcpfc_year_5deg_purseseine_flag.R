@@ -43,7 +43,7 @@ year_5deg_flag_clean <- year_5deg_flag_raw |>
   ) |>
   # Convert SW corner to center
   mutate(
-    lat = parse_and_center(lat5, offset = 2.5),   # Convert SW corner to center
+    lat = parse_and_center(lat5, offset = 2.5),   # Convert corner to center
     lon = parse_and_center(lon5, offset = 2.5),
     effort_set = rowSums(across(
       c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),  # Total sets across all set types
@@ -66,5 +66,5 @@ year_5deg_flag_clean <- year_5deg_flag_raw |>
 
 # EXPORT #######################################################################
 
-saveRDS(year_5deg_flag_clean, "data/processed/wcpfc/wcpfc_year_5deg_purseseine_flag.rds")
+saveRDS(year_5deg_flag_clean, "data/processed/wcpfc/wcpfc_year_5deg_purseseine.rds")
 

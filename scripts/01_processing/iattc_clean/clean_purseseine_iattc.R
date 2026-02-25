@@ -35,10 +35,11 @@ ps_tuna_clean <- ps_tuna |>
   ) |>
   mutate(
     effort_day = NA_real_,                         # Placeholder for effort in days
-    catch_tot = catch_skj + catch_alb + catch_bet  # Total catch across the three species
+    catch_tot = catch_skj + catch_alb + catch_bet,  # Total catch across the three species
+    rfmo = "iattc"
   ) |>
   select(
-    lon, lat, year, month,
+    rfmo, lon, lat, year, month,
     effort_set, effort_day,
     catch_tot, catch_skj, catch_alb, catch_bet
   )
