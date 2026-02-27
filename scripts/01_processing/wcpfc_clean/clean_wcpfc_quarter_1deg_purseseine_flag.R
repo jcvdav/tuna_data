@@ -5,6 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
+# ISSUE: Data set at 5 degree resolution, not 1 degree
+#
 # This R script processes raw purse seine tuna catch and effort data from the
 # WCPFC at the quarter, 1 degree level.
 #
