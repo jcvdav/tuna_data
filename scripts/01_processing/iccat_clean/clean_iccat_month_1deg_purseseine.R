@@ -1,5 +1,5 @@
 ################################################################################
-# Clean ICCAT purse seine data
+# Clean ICCAT purse seine monthly data
 ################################################################################
 #
 # Emily Rodriguez
@@ -45,6 +45,8 @@ center_iccat <- function(lat, lon, quad_id) {
 iccat <- data |>
   filter(gear_grp_code == "PS",
          square_type_code == "1x1",
+         d_set_type_id == ".w",     # Filter for weights only
+         time_period_id < 13        # Filter for monthly data only
          ) |>
   rename(
     year = year_c,
@@ -58,20 +60,12 @@ iccat <- data |>
     centered = center_iccat(lat, lon, quad_id),
     lat = centered$lat,
     lon = centered$lon,
+    # Name data set
     rfmo = "iccat",
-    # Convert catches to metric tons, change numeric counts to NA
-    catch_skj = case_when(
-      catch_unit == "kg" ~ catch_skj / 1000,
-      catch_unit == "nr" ~ NA_real_
-    ),
-    catch_alb = case_when(
-      catch_unit == "kg" ~ catch_alb / 1000,
-      catch_unit == "nr" ~ NA_real_
-    ),
-    catch_bet = case_when(
-      catch_unit == "kg" ~ catch_bet / 1000,
-      catch_unit == "nr" ~ NA_real_
-      ),
+    # Convert catches to metric tons
+    catch_skj = catch_skj / 1000,
+    catch_alb = catch_alb / 1000,
+    catch_bet = catch_bet / 1000,
     catch_tot = catch_skj + catch_bet + catch_alb,
     # Standardize effort
     effort_set = case_when(
@@ -79,7 +73,7 @@ iccat <- data |>
       eff2type == "NO.SETS" ~ eff2,
       TRUE ~ NA_real_
     ),
-    effort_day = case_when(
+    effort_day = case_when(      # Must be updated to match WCPFC definition
       eff1type == "D.FISH" ~ eff1,
       eff2type == "D.FISH" ~ eff2,
       TRUE ~ NA_real_

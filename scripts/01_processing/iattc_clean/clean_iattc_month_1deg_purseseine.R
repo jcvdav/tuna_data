@@ -1,12 +1,12 @@
 ################################################################################
-# Clean IATTC purse seine data
+# Clean IATTC purse seine monthly data
 ################################################################################
 #
 # Emily Rodriguez
 # ecr108@miami.edu
 #
 # This R script processes raw purse seine tuna catch and effort data from the
-# IATTC at a 1° monthly resolution.
+# IATTC at a 1 degree monthly resolution.
 #
 ################################################################################
 
@@ -19,7 +19,6 @@ library(janitor)
 ## Load data -------------------------------------------------------------------
 ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine/PublicPSTuna/PublicPSTunaFlag.csv") |>
   clean_names()
-colnames(ps_tuna)
 
 ## Clean data ------------------------------------------------------------------
 ps_tuna_clean <- ps_tuna |>
@@ -34,7 +33,7 @@ ps_tuna_clean <- ps_tuna |>
     catch_bet = bet
   ) |>
   mutate(
-    effort_day = NA_real_,                         # Placeholder for effort in days
+    effort_day = NA_real_,                          # Placeholder for effort in days
     catch_tot = catch_skj + catch_alb + catch_bet,  # Total catch across the three species
     rfmo = "iattc"
   ) |>
