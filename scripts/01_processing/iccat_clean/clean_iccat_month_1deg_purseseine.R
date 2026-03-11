@@ -73,7 +73,7 @@ iccat <- data |>
       eff2type == "NO.SETS" ~ eff2,
       TRUE ~ NA_real_
     ),
-    effort_day = case_when(      # Must be updated to match WCPFC definition
+    effort_day = case_when(
       eff1type == "D.FISH" ~ eff1,
       eff2type == "D.FISH" ~ eff2,
       TRUE ~ NA_real_

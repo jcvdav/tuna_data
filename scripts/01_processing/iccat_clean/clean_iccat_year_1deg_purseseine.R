@@ -6,7 +6,7 @@
 # ecr108@miami.edu
 #
 # This R script processes raw purse seine tuna catch and effort data from
-# ICCAT at the 1 degree, yearly level.
+# ICCAT into a 1x1 degree yearly resolution.
 #
 ################################################################################
 
@@ -71,7 +71,7 @@ iccat_year <- data |>
       eff2type == "NO.SETS" ~ eff2,
       TRUE ~ NA_real_
     ),
-    effort_day = case_when(       # Must be updated to match WCPFC definition
+    effort_day = case_when(
       eff1type == "D.FISH" ~ eff1,
       eff2type == "D.FISH" ~ eff2,
       TRUE ~ NA_real_

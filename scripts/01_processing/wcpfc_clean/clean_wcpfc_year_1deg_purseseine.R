@@ -5,8 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# This R script processes raw purse seine tuna catch and effort at the monthly
-# resolution and aggregates it to a yearly, 1 degree resolution.
+# This R script processes raw purse seine tuna catch and effort at a 1x1 degree
+# monthly resolution from the WCPFC and aggregates it to 1x1 degree yearly resolution.
 #
 ################################################################################
 # SET UP #######################################################################
