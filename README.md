@@ -43,12 +43,12 @@ Management Organizations (RFMOs).
 | `catch_bet`  | Catch of bigeye tuna (mt)        |
 
 
-## Harmonized data sets
+## Harmonized datasets
 ##### File path under: [data/processed](data/processed)
-| Gear        | Spatial | Temporal | Dataset                             |
-|-------------|---------|----------|-------------------------------------|
-| purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` |
-| purse seine | 1°×1°   | year     | `allrfmo_year_1deg_purseseine.rds`  |
+| Gear        | Spatial | Temporal | Dataset                           | RFMOs Included      |
+|-------------|---------|----------|-----------------------------------|---------------------|
+| purse seine | 1°×1°   | month    | `iattc_month_1deg_purseseine.rds` | IATTC, ICCAT, WCPFC |
+| purse seine | 1°×1°   | year     | `iattc_year_1deg_purseseine.rds`  | IATTC, ICCAT, WCPFC |
 
 ## Cleaned catch and effort data sets by RFMO
 
