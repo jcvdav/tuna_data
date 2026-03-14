@@ -44,14 +44,13 @@ Management Organizations (RFMOs).
 
 
 ## Harmonized data sets
-
-
-## Cleaned catch and effort data sets by 
 ##### File path under: [data/processed](data/processed)
 | Gear        | Spatial | Temporal | Dataset                             |
 |-------------|---------|----------|-------------------------------------|
 | purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` |
 | purse seine | 1°×1°   | year     | `allrfmo_year_1deg_purseseine.rds`  |
+
+## Cleaned catch and effort data sets by RFMO
 
 ### IATTC
 ##### File path under: [data/processed/iattc](data/processed/iattc)
