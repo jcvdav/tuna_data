@@ -15,9 +15,9 @@ Management Organizations (RFMOs).
 
 - `data/`:
     - `data/raw`: contains original datasets retrieved from RFMOs
-    - `data/processed`: 
+    - `data/processed`: contains cleaned data from various RFMOs in a standardized format
 - `scripts/`:
-    - `scripts/01_processing`:
+    - `scripts/01_processing`: contains scripts that clean and harmonize RFMO data 
     - `scripts/02_analysis`:
     - `scripts/03_content`:
 - `results/`:
@@ -43,29 +43,41 @@ Management Organizations (RFMOs).
 | `catch_bet`  | Catch of bigeye tuna (mt)        |
 
 
-## Cleaned catch and effort data sets by RFMO
+## Harmonized data sets
+
+
+## Cleaned catch and effort data sets by 
+##### File path under: [data/processed](data/processed)
+| Gear        | Spatial | Temporal | Dataset                             |
+|-------------|---------|----------|-------------------------------------|
+| purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` |
+| purse seine | 1°×1°   | year     | `allrfmo_year_1deg_purseseine.rds`  |
 
 ### IATTC
-##### File path under: `data/processed/iattc`
+##### File path under: [data/processed/iattc](data/processed/iattc)
 | Gear        | Spatial | Temporal | Dataset                           |
 |-------------|---------|----------|-----------------------------------|
 | purse seine | 1°×1°   | month    | `iattc_month_1deg_purseseine.rds` |
+| purse seine | 1°×1°   | year     | `iattc_year_1deg_purseseine.rds`  |
 
 ### ICCAT
-##### File path under: `data/processed/iccat`
-| purse seine | 1°×1° | month | `iccat_month_1deg_purseseine.rds` |
-|-------------|-------|-------|-----------------------------------|
+##### File path under: [data/processed/iccat](data/processed/iccat)
+| Gear        | Spatial | Temporal | Dataset                           |
+|-------------|---------|----------|-----------------------------------|
+| purse seine | 1°×1°   | month    | `iccat_month_1deg_purseseine.rds` |
+| purse seine | 1°×1°   | year     | `iccat_year_1deg_purseseine.rds`  |
 
 ### IOTC
-##### File path under: `data/processed/iotc`
+##### File path under: [data/processed/iotc](data/processed/iotc)
 
 ### WCPFC
-##### File path under: `data/processed/wcpfc`
+##### File path under: [data/processed/wcpfc](data/processed/wcpfc)
 | Gear        | Spatial | Temporal | Dataset                             |
 |-------------|---------|----------|-------------------------------------|
 | purse seine | 1°×1°   | month    | `wcpfc_month_1deg_purseseine.rds`   |
 | purse seine | 5°×5°   | month    | `wcpfc_month_5deg_purseseine.rds`   |
 | purse seine | 5°×5°   | quarter  | `wcpfc_quarter_5deg_purseseine.rds` |
+| purse seine | 1°×1°   | year     | `wcpfc_year_1deg_purseseine.rds`    |
 | purse seine | 5°×5°   | year     | `wcpfc_year_5deg_purseseine.rds`    |
 
 
@@ -73,7 +85,7 @@ Management Organizations (RFMOs).
 
 ### IATTC
 ##### Source: https://www.iattc.org/en-us/Data/Public-domain
-##### File path under: `data/raw/iattc`
+##### File path under: [data/raw/iattc](data/raw/iattc)
 
 | Gear          | Spatial | Temporal | Organized by     | Species           | Measurement type      | Base path                                       | Dataset                       | Metadata                        |
 |---------------|---------|----------|------------------|-------------------|-----------------------|-------------------------------------------------|-------------------------------|---------------------------------|
@@ -85,7 +97,8 @@ Management Organizations (RFMOs).
 
 ### ICCAT
 ##### Source: https://www.iccat.int/en/accesingdb.HTML
-##### File path under: `data/raw/iccat`
+##### File path under: [data/raw/iccat](data/raw/iccat)
+##### Additional metadata can be found [here](https://www.iccat.int/en/stat_codes.html)
 
 | Gear  | Spatial         | Temporal | Organized by            | Species | Measurement type | Base path                                                      | Dataset                                 | Metadata             |
 |-------|-----------------|----------|-------------------------|---------|------------------|----------------------------------------------------------------|-----------------------------------------|----------------------|
@@ -96,7 +109,7 @@ Management Organizations (RFMOs).
 
 ### IOTC
 ##### Source: https://iotc.org/data/datasets
-##### File path under: `data/raw/iotc`
+##### File path under: [data/raw/iotc](data/raw/iotc)
 
 | Gear                     | Spatial         | Temporal | Organized by | Species | Measurement type | Base path                                        | Dataset  | Metadata                                                                                                   |
 |--------------------------|-----------------|----------|--------------|---------|------------------|--------------------------------------------------|----------|------------------------------------------------------------------------------------------------------------|
@@ -105,7 +118,7 @@ Management Organizations (RFMOs).
 
 ### WCPFC
 ##### Source: https://www.wcpfc.int/sustainability/scientific-data/wcpfc-public-domain-aggregated-catcheffort-data-download-page
-##### File path under: `data/raw/wcpfc`
+##### File path under: [data/raw/wcpfc](data/raw/wcpfc)
 
 | Gear          | Spatial | Temporal | Organized by | Species | Measurement type | Base path                                                      | Dataset                                 | Metadata                  |
 |---------------|---------|----------|--------------|---------|------------------|----------------------------------------------------------------|-----------------------------------------|---------------------------|
