@@ -5,7 +5,7 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# This R script processes raw purse seine tuna catch and effort at the monthly,
+# This script takes cleaned purse seine tuna catch and effort at the monthly,
 # 1x1 degree resolution and aggregates it to a yearly, 1x1 degree degree resolution.
 #
 ################################################################################
@@ -13,29 +13,12 @@
 # SET UP #######################################################################
 
 library(tidyverse)
-library(janitor)
 
 ## Load data -------------------------------------------------------------------
-ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine/PublicPSTuna/PublicPSTunaFlag.csv") |>
-  clean_names()
+iccat <- readRDS("data/processed/iattc/iattc_month_1deg_purseseine.rds")
 
 ## Clean and aggregate to yearly -----------------------------------------------
-iattc_year <- ps_tuna |>
-  rename(
-    year = year,
-    month = month,
-    lat = lat_c1,
-    lon = lon_c1,
-    effort_set = num_sets,
-    catch_skj = skj,
-    catch_alb = alb,
-    catch_bet = bet
-  ) |>
-  mutate(
-    catch_tot = catch_skj + catch_alb + catch_bet,
-    effort_day = NA_real_,     # IATTC does not report days
-    rfmo = "iattc"
-  ) |>
+iattc_year <- iccat |>
   group_by(rfmo, lon, lat, year) |>
   summarise(
     effort_set = sum(effort_set, na.rm = TRUE),

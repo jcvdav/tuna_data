@@ -8,6 +8,8 @@
 # This R script processes raw purse seine tuna catch and effort data from the
 # IATTC at a 1 degree monthly resolution.
 #
+# Note: Decimals appear in earlier reporting
+#
 ################################################################################
 
 # SET UP #######################################################################
