@@ -15,10 +15,10 @@ Management Organizations (RFMOs).
 
 - `data/`:
     - `data/raw`: contains original datasets retrieved from RFMOs
-    - `data/processed`: contains cleaned data from various RFMOs in a standardized format
+    - `data/processed`: contains cleaned data from various RFMOs in a standardized format and harmonized datasets
 - `scripts/`:
-    - `scripts/01_processing`: contains scripts that clean and harmonize RFMO data 
-    - `scripts/02_analysis`:
+    - `scripts/01_standardizing`: contains scripts that clean RFMO data 
+    - `scripts/02_processing`: contains scripts that harmonize RFMO data
     - `scripts/03_content`:
 - `results/`:
     - `results/figures`
@@ -45,10 +45,10 @@ Management Organizations (RFMOs).
 
 ## Harmonized datasets
 ##### File path under: [data/processed](data/processed)
-| Gear        | Spatial | Temporal | Dataset                           | RFMOs Included      |
-|-------------|---------|----------|-----------------------------------|---------------------|
-| purse seine | 1°×1°   | month    | `iattc_month_1deg_purseseine.rds` | IATTC, ICCAT, WCPFC |
-| purse seine | 1°×1°   | year     | `iattc_year_1deg_purseseine.rds`  | IATTC, ICCAT, WCPFC |
+| Gear        | Spatial | Temporal | Dataset                             | RFMOs Included      |
+|-------------|---------|----------|-------------------------------------|---------------------|
+| purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` | IATTC, ICCAT, WCPFC |
+| purse seine | 1°×1°   | year     | `allrfmo_year_1deg_purseseine.rds`  | IATTC, ICCAT, WCPFC |
 
 ## Cleaned catch and effort data sets by RFMO
 
