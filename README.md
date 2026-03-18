@@ -15,7 +15,8 @@ Management Organizations (RFMOs).
 
 - `data/`:
     - `data/raw`: contains original datasets retrieved from RFMOs
-    - `data/processed`: contains cleaned data from various RFMOs in a standardized format and harmonized datasets
+    - `data/processed`: contains cleaned data from various RFMOs in a standardized format
+    - `data/output`: contains harmonized datasets
 - `scripts/`:
     - `scripts/01_standardizing`: contains scripts that clean RFMO data 
     - `scripts/02_processing`: contains scripts that harmonize RFMO data
