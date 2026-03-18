@@ -45,7 +45,7 @@ Management Organizations (RFMOs).
 
 
 ## Harmonized datasets
-##### File path under: [data/processed](data/processed)
+##### File path under: [data/ouput](data/output)
 | Gear        | Spatial | Temporal | Dataset                             | RFMOs Included      |
 |-------------|---------|----------|-------------------------------------|---------------------|
 | purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` | IATTC, ICCAT, WCPFC |
