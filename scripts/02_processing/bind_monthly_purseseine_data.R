@@ -32,4 +32,4 @@ tuna_all_clean <- bind_rows(
     arrange(year, month)
 
 # EXPORT #######################################################################
-saveRDS(tuna_all_clean, "data/processed/allrfmo_month_1deg_purseseine.rds")
+saveRDS(tuna_all_clean, "data/output/allrfmo_month_1deg_purseseine.rds")

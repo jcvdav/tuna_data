@@ -8,26 +8,24 @@
 # ISSUE: Data set at 5 degree resolution, not 1 degree (using older version at 1 degree)
 #
 # This R script processes raw purse seine tuna catch and effort data from the
-# WCPFC at the quarter, 1 degree level.
+# WCPFC at the quarter, 1 degree level with flag ID.
 #
 ################################################################################
 
 # SET UP #######################################################################
 
-## Load packages ---------------------------------------------------------------
 library(tidyverse)
 library(stringr)
 library(janitor)
+library(countrycode)
 
 ## Load data -------------------------------------------------------------------
 
-quarter_1deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_1deg_purseseine_flag/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_1x1_QTR_FLAG_old.CSV") |>
-  clean_names()
+quarter_1deg_flag_raw <- read_csv(
+  "data/raw/wcpfc/quarter_1deg_purseseine_flag/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_1x1_QTR_FLAG_old.CSV"
+) |> clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------
-
-### 1° grid → offset = 0.5°
-### 5° grid → offset = 2.5°
 
 parse_and_center <- function(x, offset = 0) {
   x <- trimws(x)
@@ -36,39 +34,50 @@ parse_and_center <- function(x, offset = 0) {
   val * sign + offset
 }
 
-
 ## Clean data ------------------------------------------------------------------
 
 wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
   rename(
     year = yy,
     quarter = qtr,
+    flag = flag_id,          # <-- keep flag
     effort_day = days
   ) |>
-  # Convert SW corner to center
   mutate(
-    lat = parse_and_center(lat_short, offset = 0.5),   # Convert corner to center
+    # Convert SW corner to center
+    lat = parse_and_center(lat_short, offset = 0.5),
     lon = parse_and_center(lon_short, offset = 0.5),
+
+    # Convert ISO-2 → ISO-3 (keep NA as NA)
+    flag = countrycode(flag, "iso2c", "iso3c",
+                       custom_match = c("SU" = "SUN")),
+
+    # Total sets across all set types
     effort_set = rowSums(across(
-      c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),  # Total sets across all set types
+      c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)
+    ), na.rm = TRUE),
+
+    # Species-specific catches
     catch_skj = rowSums(across(
-      c(skj_c_una, skj_c_log, skj_c_dfad, skj_c_afad, skj_c_oth)), na.rm = TRUE),  # Species specific catches
+      c(skj_c_una, skj_c_log, skj_c_dfad, skj_c_afad, skj_c_oth)
+    ), na.rm = TRUE),
+
     catch_bet = rowSums(across(
-      c(bet_c_una, bet_c_log, bet_c_dfad, bet_c_afad, bet_c_oth)), na.rm = TRUE),
-    catch_alb = 0,  # ALB not reported in WCPFC PS data
+      c(bet_c_una, bet_c_log, bet_c_dfad, bet_c_afad, bet_c_oth)
+    ), na.rm = TRUE),
+
+    catch_alb = 0,
     rfmo = "wcpfc"
-    ) |>
-    # Total catch across the three species (sums if NAs exist)
-    mutate(
-      catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
-    ) |>
-      # Remove all NA or all 0 species rows
-      filter(
-        !if_all(c(catch_skj, catch_alb, catch_bet), is.na),       # remove rows where all are NA
-        !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
-      ) |>
+  ) |>
+  mutate(
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+  ) |>
+  filter(
+    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),   # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0) # remove rows where all are 0
+  ) |>
   select(
-    rfmo, lon, lat, year, quarter,
+    rfmo, flag, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
     catch_alb, catch_bet
@@ -76,4 +85,4 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
 
 # EXPORT #######################################################################
 
-saveRDS(wcpfc_quarter_1deg_purseseine_flag_clean, "data/processed/wcpfc/wcpfc_quarter_1deg_purseseine_flag.rds")
+saveRDS(wcpfc_quarter_1deg_purseseine_flag_clean, "data/processed/wcpfc/wcpfc_year_1deg_purseseine_flag.rds")
