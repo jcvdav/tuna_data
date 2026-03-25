@@ -53,10 +53,16 @@ wcpfc_month_5deg_purseseine_clean <- month_5deg_raw |>
     catch_bet = rowSums(across(
       c(bet_c_una, bet_c_log, bet_c_dfad, bet_c_afad, bet_c_oth)), na.rm = TRUE),
     catch_alb = 0,  # ALB not reported in WCPFC PS data
-    catch_tot = catch_skj + catch_bet + catch_alb,
-    rfmo = "wcpfc",
-    effort_set = if_else(catch_tot == 0, 0, effort_set),  # Remove effort when focus species not caught
-    effort_day = if_else(catch_tot == 0, 0, effort_day)
+    rfmo = "wcpfc"
+  ) |>
+  # Total catch across the three species (sums if NAs exist)
+  mutate(
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+  ) |>
+  # Remove all NA or all 0 species rows
+  filter(
+    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),       # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
   ) |>
   select(
     rfmo, lon, lat, year, month,
@@ -64,6 +70,6 @@ wcpfc_month_5deg_purseseine_clean <- month_5deg_raw |>
     catch_tot, catch_skj,
     catch_alb, catch_bet
   )
-view(wcpfc_month_5deg_purseseine_clean)
+
 # EXPORT #######################################################################
 saveRDS(wcpfc_month_5deg_purseseine_clean, "data/processed/wcpfc/wcpfc_month_5deg_purseseine.rds")

@@ -8,7 +8,7 @@
 # This R script processes raw purse seine tuna catch and effort data from the
 # IATTC at a 1 degree monthly resolution.
 #
-# Note: Decimals appear in earlier reporting
+# Note: Decimals appear in earlier reporting.
 #
 ################################################################################
 
@@ -35,9 +35,17 @@ ps_tuna_clean <- ps_tuna |>
     catch_bet = bet
   ) |>
   mutate(
-    effort_day = NA_real_,                          # Placeholder for effort in days
-    catch_tot = catch_skj + catch_alb + catch_bet,  # Total catch across the three species
+    effort_day = NA_real_,  # Placeholder for effort in days
     rfmo = "iattc"
+  ) |>
+  # Total catch across the three species (sums if NAs exist)
+  mutate(
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+  ) |>
+  # Remove all NA or all 0 species rows
+  filter(
+    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),        # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
   ) |>
   select(
     rfmo, lon, lat, year, month,

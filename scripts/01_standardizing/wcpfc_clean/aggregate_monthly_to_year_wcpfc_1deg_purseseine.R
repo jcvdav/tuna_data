@@ -8,6 +8,9 @@
 # This R script processes cleaned purse seine tuna catch and effort at a 1x1 degree
 # monthly resolution from the WCPFC and aggregates it to 1x1 degree yearly resolution.
 #
+#
+# Note: Some earlier reportings of catch and effort show up as decimals.
+#
 ################################################################################
 # SET UP #######################################################################
 

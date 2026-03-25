@@ -39,3 +39,4 @@ iattc_year <- iccat |>
 
 # EXPORT #######################################################################
 saveRDS(iattc_year, "data/processed/iattc/iattc_year_1deg_purseseine.rds")
+

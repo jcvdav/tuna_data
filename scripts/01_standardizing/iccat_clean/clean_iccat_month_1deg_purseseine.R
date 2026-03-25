@@ -60,13 +60,15 @@ iccat <- data |>
     centered = center_iccat(lat, lon, quad_id),
     lat = centered$lat,
     lon = centered$lon,
+
     # Name data set
     rfmo = "iccat",
+
     # Convert catches to metric tons
     catch_skj = catch_skj / 1000,
     catch_alb = catch_alb / 1000,
     catch_bet = catch_bet / 1000,
-    catch_tot = catch_skj + catch_bet + catch_alb,
+
     # Standardize effort
     effort_set = case_when(
       eff1type == "NO.SETS" ~ eff1,
@@ -78,8 +80,13 @@ iccat <- data |>
       eff2type == "D.FISH" ~ eff2,
       TRUE ~ NA_real_
     ),
-    effort_set = if_else(catch_tot == 0, 0, effort_set),  # Remove effort when focus species not caught
-    effort_day = if_else(catch_tot == 0, 0, effort_day)
+
+    # Total catch across the three species (sums if NAs exist)
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+    ) |>
+  filter(
+    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),    # removes rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0) # removes rows where all are 0
   ) |>
 select(
   rfmo, lon, lat, year, month,
@@ -90,3 +97,4 @@ select(
 
 # EXPORT #######################################################################
 saveRDS(iccat, "data/processed/iccat/iccat_month_1deg_purseseine.rds")
+
