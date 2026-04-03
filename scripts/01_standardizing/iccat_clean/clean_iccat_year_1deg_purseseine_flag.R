@@ -63,7 +63,8 @@ iccat_year_flag <- t2ce_flagged |>
     month = time_period_id,
     catch_skj = skj,
     catch_alb = alb,
-    catch_bet = bet
+    catch_bet = bet,
+    catch_yft = yft
   ) |>
   mutate(
     centered = center_iccat(lat, lon, quad_id),
@@ -86,6 +87,7 @@ iccat_year_flag <- t2ce_flagged |>
     catch_skj = catch_skj / 1000,
     catch_alb = catch_alb / 1000,
     catch_bet = catch_bet / 1000,
+    catch_yft = catch_yft / 1000,
 
     effort_set = case_when(
       eff1type == "NO.SETS" ~ eff1,
@@ -98,11 +100,11 @@ iccat_year_flag <- t2ce_flagged |>
       TRUE ~ NA_real_
     ),
 
-    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet, catch_yft)), na.rm = TRUE)
   ) |>
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0)
   ) |>
   group_by(rfmo, flag, lon, lat, year) |>
   summarise(
@@ -112,6 +114,7 @@ iccat_year_flag <- t2ce_flagged |>
     catch_skj  = sum(catch_skj,  na.rm = TRUE),
     catch_alb  = sum(catch_alb,  na.rm = TRUE),
     catch_bet  = sum(catch_bet,  na.rm = TRUE),
+    catch_yft  = sum(catch_yft,  na.rm = TRUE),
     .groups = "drop"
   ) |>
   arrange(year, lat, lon, flag)

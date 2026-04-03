@@ -51,7 +51,8 @@ iccat_year <- data |>
     month = time_period_id,
     catch_skj = skj,
     catch_alb = alb,
-    catch_bet = bet
+    catch_bet = bet,
+    catch_yft = yft
   ) |>
   mutate(
     # Create variable that centers points using function
@@ -66,6 +67,7 @@ iccat_year <- data |>
     catch_skj = catch_skj / 1000,
     catch_alb = catch_alb / 1000,
     catch_bet = catch_bet / 1000,
+    catch_yft = catch_yft / 1000,
 
     # Standardize effort
     effort_set = case_when(
@@ -80,11 +82,11 @@ iccat_year <- data |>
     ),
 
     # Total catch across the three species (sums if NAs exist)
-    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet, catch_yft)), na.rm = TRUE)
   ) |>
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),    # removes rows where all are NA
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0) # removes rows where all are 0
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),    # removes rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0) # removes rows where all are 0
   ) |>
   group_by(rfmo, lon, lat, year) |>
   summarise(
@@ -94,6 +96,7 @@ iccat_year <- data |>
     catch_skj  = sum(catch_skj,  na.rm = TRUE),
     catch_alb  = sum(catch_alb,  na.rm = TRUE),
     catch_bet  = sum(catch_bet,  na.rm = TRUE),
+    catch_yft  = sum(catch_yft,  na.rm = TRUE),
     .groups = "drop"
   ) |>
   arrange(year, lat, lon) |>
@@ -101,7 +104,7 @@ iccat_year <- data |>
     rfmo, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
-    catch_alb, catch_bet
+    catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################

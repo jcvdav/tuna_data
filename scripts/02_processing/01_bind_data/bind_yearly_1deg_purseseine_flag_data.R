@@ -30,4 +30,4 @@ tuna_all_year <- bind_rows(
 
 # EXPORT #######################################################################
 
-saveRDS(tuna_all_year,"data/output/allrfmo_year_1deg_purseseine_flag.rds")
+saveRDS(tuna_all_year,"data/processed//01_bound_allrfmo_year_1deg_purseseine_flag.rds")

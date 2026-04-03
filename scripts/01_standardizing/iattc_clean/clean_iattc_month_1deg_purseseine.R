@@ -19,7 +19,7 @@ library(tidyverse)
 library(janitor)
 
 ## Load data -------------------------------------------------------------------
-ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine/PublicPSTuna/PublicPSTunaFlag.csv") |>
+ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine_flag/PublicPSTuna/PublicPSTunaFlag.csv") |>
   clean_names()
 
 ## Clean data ------------------------------------------------------------------
@@ -32,7 +32,8 @@ ps_tuna_clean <- ps_tuna |>
     effort_set = num_sets,
     catch_skj = skj,
     catch_alb = alb,
-    catch_bet = bet
+    catch_bet = bet,
+    catch_yft = yft
   ) |>
   mutate(
     effort_day = NA_real_,  # Placeholder for effort in days
@@ -40,17 +41,17 @@ ps_tuna_clean <- ps_tuna |>
   ) |>
   # Total catch across the three species (sums if NAs exist)
   mutate(
-    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet, catch_yft)), na.rm = TRUE)
   ) |>
   # Remove all NA or all 0 species rows
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),        # remove rows where all are NA
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),        # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0)    # remove rows where all are 0
   ) |>
   select(
     rfmo, lon, lat, year, month,
     effort_set, effort_day,
-    catch_tot, catch_skj, catch_alb, catch_bet
+    catch_tot, catch_skj, catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################

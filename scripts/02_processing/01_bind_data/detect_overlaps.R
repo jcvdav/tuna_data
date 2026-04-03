@@ -5,8 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# This script defines overlapping cells between WCPFC and IATTC at the monthly
-# and yearly level, visualizes them, and exports an RDS file of overlaps to be
+# This script defines overlapping cells between WCPFC and IATTC at the monthly,
+# yearly, and yearly flag level, visualizes them, and exports an RDS file of overlaps to be
 # used in cleaning bound scripts.
 #
 ################################################################################
@@ -25,6 +25,10 @@ yearly <- readRDS("data/processed/01_bound/allrfmo_year_1deg_purseseine.rds") |>
 # Monthly data
 monthly <- readRDS("data/processed/01_bound/allrfmo_month_1deg_purseseine.rds") |>
   filter(rfmo %in% c("wcpfc", "iattc"))
+
+yearly_flag <- readRDS("data/processed/01_bound/allrfmo_year_1deg_purseseine_flag.rds") |>
+  filter(rfmo %in% c("wcpfc", "iattc"))
+
 
 # Find overlaps ----------------------------------------------------------------
 # Detect yearly overlaps
@@ -49,12 +53,29 @@ monthly_overlap_summary <- monthly_overlap |>
   group_by(year, month) |>
   summarise(n_cells = n_distinct(paste(lat, lon)), .groups = "drop")
 
+# Detect overlaps in yearly flag data
+yearly_flag_overlap <- yearly_flag |>
+  group_by(lat, lon, year) |>
+  filter(n_distinct(rfmo) == 2) |>
+  ungroup()
+
+# Summary table of yearly flag overlaps
+yearly_flag_overlap_summary <- yearly_flag_overlap |>
+  group_by(year) |>
+  summarise(
+    n_cells = n_distinct(paste(lat, lon)),
+    .groups = "drop"
+  )
+
 # Results ----------------------------------------------------------------------
 # Yearly
 yearly_overlap_summary
 
 # Monthly
 monthly_overlap_summary
+
+# Yearly flag
+yearly_flag_overlap_summary
 
 # Determine if reporting is similar --------------------------------------------
 
@@ -208,3 +229,8 @@ monthly_overlap_cells <- monthly_overlap |>
   distinct(lat, lon, year, month)
 
 saveRDS(monthly_overlap_cells,"data/processed/01_bound/monthly_overlap_cells.rds")
+
+yearly_flag_overlap_cells <- yearly_flag_overlap |>
+  distinct(lat, lon, year)
+
+saveRDS(yearly_flag_overlap_cells,"data/processed/01_bound/yearly_flag_overlap_cells.rds")

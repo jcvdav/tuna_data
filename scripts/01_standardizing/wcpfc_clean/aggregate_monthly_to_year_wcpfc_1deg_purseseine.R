@@ -31,13 +31,14 @@ wcpfc_year <- wcpfc |>
     catch_skj  = sum(catch_skj,  na.rm = TRUE),
     catch_alb  = sum(catch_alb,  na.rm = TRUE),
     catch_bet  = sum(catch_bet,  na.rm = TRUE),
+    catch_yft  = sum(catch_yft,  na.rm = TRUE),
     .groups = "drop"
   ) |>
   select(
     rfmo, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
-    catch_alb, catch_bet
+    catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################

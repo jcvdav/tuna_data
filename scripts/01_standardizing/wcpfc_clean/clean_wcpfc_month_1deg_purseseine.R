@@ -56,6 +56,8 @@ wcpfc_month_1deg_purseseine_clean <- month_1deg_raw |>
     catch_bet = rowSums(across(
       c(bet_c_una, bet_c_log, bet_c_dfad, bet_c_afad, bet_c_oth)), na.rm = TRUE),
     catch_alb = 0,  # ALB not reported in WCPFC PS data
+    catch_yft = rowSums(across(
+      c(yft_c_una, yft_c_log, yft_c_dfad, yft_c_afad, yft_c_oth)), na.rm = TRUE),
     rfmo = "wcpfc"
  ) |>
   # Total catch across the three species (sums if NAs exist)
@@ -64,14 +66,14 @@ wcpfc_month_1deg_purseseine_clean <- month_1deg_raw |>
   ) |>
   # Remove all NA or all 0 species rows
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),       # remove rows where all are NA
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),       # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0)    # remove rows where all are 0
   ) |>
   select(
     rfmo, lon, lat, year, month,
     effort_set, effort_day,
     catch_tot, catch_skj,
-    catch_alb, catch_bet
+    catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################

@@ -20,13 +20,14 @@ iccat <- readRDS("data/processed/iattc/iattc_month_1deg_purseseine.rds")
 ## Clean and aggregate to yearly -----------------------------------------------
 iattc_year <- iccat |>
   group_by(rfmo, lon, lat, year) |>
-  summarise(
+  summarize(
     effort_set = sum(effort_set, na.rm = TRUE),
     effort_day = NA_real_,                      # IATTC does not report effort in days
     catch_tot  = sum(catch_tot,  na.rm = TRUE),
     catch_skj  = sum(catch_skj,  na.rm = TRUE),
     catch_alb  = sum(catch_alb,  na.rm = TRUE),
     catch_bet  = sum(catch_bet,  na.rm = TRUE),
+    catch_yft  = sum(catch_yft,  na.rm = TRUE),
     .groups = "drop"
   ) |>
   arrange(year, lat, lon) |>
@@ -34,7 +35,7 @@ iattc_year <- iccat |>
     rfmo, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
-    catch_alb, catch_bet
+    catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################

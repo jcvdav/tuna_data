@@ -5,7 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# ISSUE: Data set at 5 degree resolution, not 1 degree (using older version at 1 degree)
+# ISSUE: Data set at 5 degree resolution, not 1 degree (current script
+# is using older version at 1 degree)
 #
 # This R script processes raw purse seine tuna catch and effort data from the
 # WCPFC at the quarter, 1 degree level with flag ID.
@@ -67,20 +68,24 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
     ), na.rm = TRUE),
 
     catch_alb = 0,
+
+    catch_yft = rowSums(across(
+      c(yft_c_una, yft_c_log, yft_c_dfad, yft_c_afad, yft_c_oth)), na.rm = TRUE),
+
     rfmo = "wcpfc"
   ) |>
   mutate(
-    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
+    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet,catch_yft)), na.rm = TRUE)
   ) |>
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),   # remove rows where all are NA
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0) # remove rows where all are 0
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),   # remove rows where all are NA
+    !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0) # remove rows where all are 0
   ) |>
   select(
     rfmo, flag, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
-    catch_alb, catch_bet
+    catch_alb, catch_bet, catch_yft
   )
 
 # EXPORT #######################################################################
