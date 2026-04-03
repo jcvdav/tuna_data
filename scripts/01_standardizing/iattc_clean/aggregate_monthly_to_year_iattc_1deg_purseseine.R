@@ -22,7 +22,7 @@ iattc_year <- iccat |>
   group_by(rfmo, lon, lat, year) |>
   summarise(
     effort_set = sum(effort_set, na.rm = TRUE),
-    effort_day = sum(effort_day, na.rm = TRUE),
+    effort_day = NA_real_,                      # IATTC does not report effort in days
     catch_tot  = sum(catch_tot,  na.rm = TRUE),
     catch_skj  = sum(catch_skj,  na.rm = TRUE),
     catch_alb  = sum(catch_alb,  na.rm = TRUE),

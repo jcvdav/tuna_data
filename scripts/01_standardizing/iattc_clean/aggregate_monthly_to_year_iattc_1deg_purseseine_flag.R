@@ -35,7 +35,7 @@ ps_tuna_clean <- ps_tuna |>
     catch_bet = bet
   ) |>
   mutate(
-    effort_day = NA_real_,  # Placeholder for effort in days
+    effort_day = NA_real_,  # IATTC does not report effort in days
     rfmo = "iattc",
     # "Other" to NA
     flag = case_when(
