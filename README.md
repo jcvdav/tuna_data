@@ -1,8 +1,8 @@
 # RFMO Tuna Catch and Effort Data
 
 ## Overview
-This project focuses on developing a standardized pipeline to compile, clean, 
-and restructure tuna catch and effort datasets from multiple Regional Fisheries
+This project develops a standardized pipeline to compile, clean, and 
+restructure tuna catch and effort datasets from multiple Regional Fisheries
 Management Organizations (RFMOs). 
 
 ## RFMOs Included
@@ -45,7 +45,7 @@ Management Organizations (RFMOs).
 
 
 ## Harmonized datasets
-##### File path under: [data/ouput](data/output)
+##### File path under: [data/output](data/output)
 | Gear        | Spatial | Temporal | Dataset                             | RFMOs Included      |
 |-------------|---------|----------|-------------------------------------|---------------------|
 | purse seine | 1°×1°   | month    | `allrfmo_month_1deg_purseseine.rds` | IATTC, ICCAT, WCPFC |
@@ -81,7 +81,7 @@ Management Organizations (RFMOs).
 | purse seine | 5°×5°   | year     | `wcpfc_year_5deg_purseseine.rds`    |
 
 
-## Raw catch and effort data sets by RFMO
+## Raw catch and effort data sets by RFMO (Last updated January 2026)
 
 ### IATTC
 ##### Source: https://www.iattc.org/en-us/Data/Public-domain
