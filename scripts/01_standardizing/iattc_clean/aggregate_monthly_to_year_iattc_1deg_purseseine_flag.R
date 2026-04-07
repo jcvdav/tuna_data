@@ -19,7 +19,7 @@ library(tidyverse)
 library(janitor)
 
 ## Load data -------------------------------------------------------------------
-ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine_flag/PublicPSTuna/PublicPSTunaFlag.csv") |>
+ps_tuna <- read_csv("data/raw/iattc/month_1deg_purseseine_flag/month_1deg_purseseine_flag.csv") |>
   clean_names()
 
 ## Clean data ------------------------------------------------------------------
