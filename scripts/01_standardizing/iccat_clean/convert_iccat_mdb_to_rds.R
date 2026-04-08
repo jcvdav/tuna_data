@@ -32,11 +32,11 @@ if (Sys.info()['sysname'] == "Darwin") {
 # ------------------------------------------------------------------------------
 
 # Load data
-con <- mdb.get(file = here("data", "raw", "iccat", "ms_database_all", "t2ce_20260130", "t2ce_20260130web.mdb"))
+con <- mdb.get(file = here("data", "raw", "iccat", "ms_database_all", "ms_database_all.mdb"))
 
 # Export the data
 saveRDS(object = con,
-        file = here("data", "raw", "iccat", "ms_database_all", "t2ce_20260130", "ICCAT_database.rds"))
+        file = here("data", "raw", "iccat", "ms_database_all", "ICCAT_database.rds"))
 
 # ------------------------------------------------------------------------------
 # For Windows Users:
@@ -45,7 +45,7 @@ saveRDS(object = con,
 # Load data
 db_path <- here(
   "data", "raw", "iccat", "ms_database_all",
-  "t2ce_20260130", "t2ce_20260130web.mdb"
+  "ms_database_all.mdb"
 )
 
 con <- dbConnect(
@@ -72,5 +72,5 @@ iccat_data <- setNames(
 # Save file as .rds
 saveRDS(
   iccat_data,
-  here("data", "raw", "iccat", "ms_database_all", "t2ce_20260130", "ICCAT_database.rds")
+  here("data", "raw", "iccat", "ms_database_all", "iccat_database.rds")
 )

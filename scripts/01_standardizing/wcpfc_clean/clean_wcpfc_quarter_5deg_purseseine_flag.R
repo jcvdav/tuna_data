@@ -19,7 +19,7 @@ library(stringr)
 
 ## Load data -------------------------------------------------------------------
 
-quarter_5deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_5deg_purseseine_flag/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG.csv") |>
+quarter_5deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_5deg_purseseine_flag/quarter_5deg_purseseine_flag.csv") |>
   clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------

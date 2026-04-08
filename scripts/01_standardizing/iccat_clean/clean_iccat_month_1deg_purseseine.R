@@ -17,7 +17,7 @@ library(tidyverse)
 library(janitor)
 
 ## Load data -------------------------------------------------------------------
-data <- readRDS("data/raw/iccat/ms_database_all/t2ce_20260130/ICCAT_database.rds") |>
+data <- readRDS("data/raw/iccat/ms_database_all/iccat_database.rds") |>
   (\(x) x$t2ce)() |>
   clean_names()
 

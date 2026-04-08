@@ -21,7 +21,7 @@ library(janitor)
 
 ## Load data -------------------------------------------------------------------
 
-month_1deg_raw <- read_csv("data/raw/wcpfc/month_1deg_purseseine/WCPFC_S_PUBLIC_BY_YY_MM_1x1/WCPFC_S_PUBLIC_BY_YY_MM_1x1.csv") |>
+month_1deg_raw <- read_csv("data/raw/wcpfc/month_1deg_purseseine/month_1deg_purseseine.csv") |>
   clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------
