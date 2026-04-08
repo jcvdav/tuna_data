@@ -127,7 +127,7 @@ $(DATA_BIND)allrfmo_year_1deg_purseseine.rds: \
 # Year flag
 $(DATA_BIND)allrfmo_year_1deg_purseseine_flag.rds: \
 	$(PROC_BIND)bind_yearly_1deg_purseseine_flag.R \
-	$(PROC_ICCAT)iattc_year_1deg_purseseine_flag.rds \
+	$(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds \
 	$(PROC_ICCAT)iccat_year_1deg_purseseine_flag.rds \
 	$(PROC_WCPFC)wcpfc_year_1deg_purseseine_flag.rds
 	Rscript $<
