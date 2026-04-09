@@ -25,7 +25,7 @@ PROC_IATTC = data/processed/iattc/
 # Month
 $(PROC_IATTC)iattc_month_1deg_purseseine.rds: \
 	$(ST_IATTC)clean_iattc_month_1deg_purseseine.R \
-	$(RAW_IATTC)month_1deg_purseseine_flag/month_1deg_purseseine_flag.csv
+	$(RAW_IATTC)month_1deg_purseseine/month_1deg_purseseine_flag.csv
 	Rscript $(<)
 
 # Year
