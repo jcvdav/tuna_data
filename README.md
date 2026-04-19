@@ -112,8 +112,8 @@ Management Organizations (RFMOs).
 |-------|-----------------|----------|-------------------------|------------------|---------|--------------------------------------|-------------------------------------------|----------------|
 | multi | 1°×1° and 5°×5° | multi    | flag                    | -                | multi   | `month_multigear_flag`               | `month_multigear_flag.xlsx`               | `t2ce-ENG.pdf` |
 | multi | 1°×1° and 5°×5° | multi    | flag and operation mode | -                | multi   | `month_multigear_flag_operationmode` | `month_multigear_flag_operationmode.xlsx` | `t2ce-ENG.pdf` |
-| multi | 1°×1° and 5°×5° | multi    | multi                   | -                | multi   | `ms_database_all/t2ce_20260130`      | `iccat_database.rds`                      | `t2ce-ENG.pdf` |
-| multi | 1°×1° and 5°×5° | multi    | multi                   | -                | multi   | `ms_database_all/t2ce_20260130`      | `ms_database_all.mdb`                     | `t2ce-ENG.pdf` |
+| multi | 1°×1° and 5°×5° | multi    | multi                   | -                | multi   | `ms_database_all`                    | `iccat_database.rds`                      | `t2ce-ENG.pdf` |
+| multi | 1°×1° and 5°×5° | multi    | multi                   | -                | multi   | `ms_database_all`                    | `ms_database_all.mdb`                     | `t2ce-ENG.pdf` |
 
 ### IOTC
 ##### Source: https://iotc.org/data/datasets

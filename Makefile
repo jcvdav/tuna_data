@@ -104,6 +104,8 @@ $(PROC_ICCAT)iccat_year_1deg_purseseine_flag.rds: \
 # WCPFC
 ###############################
 
+# month 5 deg, quarter 1 deg, quarter 5 deg, and year 5 deg data not accounted for here
+
 # Month
 $(PROC_WCPFC)wcpfc_month_1deg_purseseine.rds: \
 	$(ST_WCPFC)clean_wcpfc_month_1deg_purseseine.R \
