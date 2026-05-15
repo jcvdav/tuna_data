@@ -114,14 +114,14 @@ $(PROC_WCPFC)wcpfc_month_1deg_purseseine.rds: \
 
 # Year
 $(PROC_WCPFC)wcpfc_year_1deg_purseseine.rds: \
-	$(ST_WCPFC)aggregate_monthly_to_year_wcpfc_1deg_purseseine.R \
-	$(PROC_WCPFC)wcpfc_month_1deg_purseseine.rds
+	$(ST_WCPFC)aggregate_quarter_to_year_wcpfc_1deg_purseseine.R \
+	$(RAW_WCPFC)quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv
 	Rscript $<
 
 # Year flag
 $(PROC_WCPFC)wcpfc_year_1deg_purseseine_flag.rds: \
-	$(ST_WCPFC)aggregate_quarter_to_year_wcpfc_1deg_flag.R \
-	$(RAW_WCPFC)quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag_old.csv
+	$(ST_WCPFC)aggregate_quarter_to_year_wcpfc_1deg_purseseine_flag.R \
+	$(RAW_WCPFC)quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv
 	Rscript $<
 
 
