@@ -5,25 +5,23 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# ISSUE: Data set at 5 degree resolution, not 1 degree (current script
-# is using older version at 1 degree)
+# This R script processes raw purse seine tuna catch and effort at a 1x1 degree
+# quarter resolution from the WCPFC and aggregates it to 1x1 degree yearly resolution.
 #
-# This R script processes raw purse seine tuna catch and effort data from the
-# WCPFC at the quarter, 1 degree level with flag ID.
+#
+# Note: Some earlier reportings of catch and effort show up as decimals.
 #
 ################################################################################
-
 # SET UP #######################################################################
 
 library(tidyverse)
 library(stringr)
 library(janitor)
-library(countrycode)
 
 ## Load data -------------------------------------------------------------------
 
 quarter_1deg_flag_raw <- read_csv(
-  "data/raw/wcpfc/quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag_old.csv"
+  "data/raw/wcpfc/quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv"
 ) |> clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------
@@ -41,17 +39,12 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
   rename(
     year = yy,
     quarter = qtr,
-    flag = flag_id,          # <-- keep flag
     effort_day = days
   ) |>
   mutate(
     # Convert SW corner to center
-    lat = parse_and_center(lat_short, offset = 0.5),
-    lon = parse_and_center(lon_short, offset = 0.5),
-
-    # Convert ISO-2 → ISO-3 (keep NA as NA)
-    flag = countrycode(flag, "iso2c", "iso3c",
-                       custom_match = c("SU" = "SUN")),
+    lat = parse_and_center(lat1, offset = 0.5),
+    lon = parse_and_center(lon1, offset = 0.5),
 
     # Total sets across all set types
     effort_set = rowSums(across(
@@ -81,8 +74,20 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
     !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), is.na),   # remove rows where all are NA
     !if_all(c(catch_skj, catch_alb, catch_bet, catch_yft), ~ .x == 0) # remove rows where all are 0
   ) |>
+  group_by(rfmo, lon, lat, year) |>
+  summarise(
+    effort_set = sum(effort_set, na.rm = TRUE),
+    effort_day = sum(effort_day, na.rm = TRUE),
+    catch_tot  = sum(catch_tot,  na.rm = TRUE),
+    catch_skj  = sum(catch_skj,  na.rm = TRUE),
+    catch_alb  = sum(catch_alb,  na.rm = TRUE),
+    catch_bet  = sum(catch_bet,  na.rm = TRUE),
+    catch_yft  = sum(catch_yft,  na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(year) |>
   select(
-    rfmo, flag, lon, lat, year,
+    rfmo, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
     catch_alb, catch_bet, catch_yft
@@ -90,4 +95,4 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
 
 # EXPORT #######################################################################
 
-saveRDS(wcpfc_quarter_1deg_purseseine_flag_clean, "data/processed/wcpfc/wcpfc_year_1deg_purseseine_flag.rds")
+saveRDS(wcpfc_quarter_1deg_purseseine_flag_clean, "data/processed/wcpfc/wcpfc_year_1deg_purseseine.rds")

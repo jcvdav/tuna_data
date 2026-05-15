@@ -5,8 +5,6 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# ISSUE: Data set at 5 degree resolution, not 1 degree (using older version at 1 degree)
-#
 # This R script processes raw purse seine tuna catch and effort data from the
 # WCPFC at the quarter, 1 degree level.
 #
@@ -21,7 +19,7 @@ library(janitor)
 
 ## Load data -------------------------------------------------------------------
 
-quarter_1deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag_old.csv") |>
+quarter_1deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv") |>
   clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------
@@ -47,8 +45,8 @@ wcpfc_quarter_1deg_purseseine_flag_clean <- quarter_1deg_flag_raw |>
   ) |>
   # Convert SW corner to center
   mutate(
-    lat = parse_and_center(lat_short, offset = 0.5),   # Convert corner to center
-    lon = parse_and_center(lon_short, offset = 0.5),
+    lat = parse_and_center(lat1, offset = 0.5),   # Convert corner to center
+    lon = parse_and_center(lon1, offset = 0.5),
     effort_set = rowSums(across(
       c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),  # Total sets across all set types
     catch_skj = rowSums(across(
