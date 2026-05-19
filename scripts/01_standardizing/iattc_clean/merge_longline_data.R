@@ -44,31 +44,28 @@ all.equal(iattc_num[keys], iattc_mt[keys])
 # True = keys the same
 
 # duplicates
-num_sub <- iattc_num |> select(all_of(keys), ends_with("n"))
-mt_sub  <- iattc_mt  |> select(all_of(keys), ends_with("mt"))
 
-merged <- full_join(num_sub, mt_sub, by = keys)
-nrow(merged) == nrow(iattc_num)
+nrow(iattc_merged) == nrow(iattc_num)
 # True = join did not create duplicates
 
-# lost info
+# check lost info
 all.equal(
-  merged |> select(ends_with("n")),
+  iattc_merged |> select(ends_with("n")),
   num_sub |> select(ends_with("n"))
 )
 # True = all number data preserved
 
 all.equal(
-  merged |> select(ends_with("mt")),
+  iattc_merged |> select(ends_with("mt")),
   mt_sub |> select(ends_with("mt"))
 )
 # true = all mt data preserved
 
 # id rows where both units exist
-merged <- merged |>
+iattc_merged <- iattc_merged |>
   mutate(row_id = row_number())
 
-both_units <- merged |>
+both_units <- iattc_merged |>
   mutate(
     has_num = rowSums(across(ends_with("n")), na.rm = TRUE) > 0,
     has_mt  = rowSums(across(ends_with("mt")), na.rm = TRUE) > 0
@@ -85,7 +82,7 @@ all(both_units$ALBmt == iattc_mt$ALBmt[both_units$row_id])
 # Both true
 
 # Test single unit rows merged correctly
-only_num <- merged |>
+only_num <- iattc_merged |>
   filter(
     rowSums(across(ends_with("n")), na.rm = TRUE) > 0 &
       rowSums(across(ends_with("mt")), na.rm = TRUE) == 0
@@ -97,7 +94,7 @@ all.equal(
 )
 # True
 
-only_mt <- merged |>
+only_mt <- iattc_merged |>
   filter(
     rowSums(across(ends_with("n")), na.rm = TRUE) == 0 &
       rowSums(across(ends_with("mt")), na.rm = TRUE) > 0
