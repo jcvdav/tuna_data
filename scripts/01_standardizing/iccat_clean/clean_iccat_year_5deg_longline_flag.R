@@ -15,7 +15,6 @@
 ## Load packages ---------------------------------------------------------------
 library(tidyverse)
 library(janitor)
-library(stringr)
 
 ## Load data -------------------------------------------------------------------
 iccat <- readRDS("data/raw/iccat/ms_database_all/iccat_database.rds")

@@ -16,7 +16,6 @@
 ## Load packages ---------------------------------------------------------------
 library(tidyverse)
 library(janitor)
-library(stringr)
 
 ## Load data -------------------------------------------------------------------
 ll_raw <- readRDS("data/raw/iattc/month_5deg_longline_flag/month_5deg_longline_flag_merged.rds")

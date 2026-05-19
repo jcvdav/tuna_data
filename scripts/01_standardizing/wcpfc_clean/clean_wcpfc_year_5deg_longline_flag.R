@@ -15,7 +15,6 @@
 ## Load packages ---------------------------------------------------------------
 library(tidyverse)
 library(janitor)
-library(stringr)
 library(countrycode)
 
 ## Load data -------------------------------------------------------------------
