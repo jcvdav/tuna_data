@@ -6,7 +6,7 @@
 # ecr108@miami.edu
 #
 # This R script processes raw purse seine tuna catch and effort data from the
-# IATTC at a 1 degree monthly resolution with flag ID.
+# IATTC at a 1 degree monthly resolution with flag ID to the yearly level.
 #
 # Note: Decimals appear in earlier reporting.
 #
