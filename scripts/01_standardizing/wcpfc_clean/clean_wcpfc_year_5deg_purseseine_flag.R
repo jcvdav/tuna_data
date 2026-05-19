@@ -6,7 +6,7 @@
 # ecr108@miami.edu
 #
 # This R script processes raw purse seine tuna catch and effort data from the
-# WCPFC at the year, 5 degree level.
+# WCPFC at the year, 5 degree level with flag data.
 #
 ################################################################################
 
@@ -16,6 +16,7 @@
 library(tidyverse)
 library(janitor)
 library(stringr)
+library(countrycode)
 
 ## Load data -------------------------------------------------------------------
 
@@ -39,12 +40,19 @@ parse_and_center <- function(x, offset = 0) {
 year_5deg_flag_clean <- year_5deg_flag_raw |>
   rename(
     year = yy,
-    effort_day = days
+    effort_day = days,
+    flag = flag_code
   ) |>
   # Convert SW corner to center
   mutate(
     lat = parse_and_center(lat5, offset = 2.5),   # Convert corner to center
     lon = parse_and_center(lon5, offset = 2.5),
+
+    # Convert ISO-2 → ISO-3 (keep NA as NA)
+    flag = countrycode(flag, "iso2c", "iso3c",
+                       custom_match = c("SU" = "SUN")),
+
+    # Effort and catch
     effort_set = rowSums(across(
       c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),  # Total sets across all set types
     catch_skj = rowSums(across(
@@ -64,7 +72,7 @@ year_5deg_flag_clean <- year_5deg_flag_raw |>
     !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
   ) |>
   select(
-    rfmo, lon, lat, year,
+    rfmo, flag, lon, lat, year,
     effort_set, effort_day,
     catch_tot, catch_skj,
     catch_alb, catch_bet
@@ -72,5 +80,5 @@ year_5deg_flag_clean <- year_5deg_flag_raw |>
 
 # EXPORT #######################################################################
 
-saveRDS(year_5deg_flag_clean, "data/processed/wcpfc/wcpfc_year_5deg_purseseine.rds")
+saveRDS(year_5deg_flag_clean, "data/processed/wcpfc/wcpfc_year_5deg_purseseine_flag.rds")
 

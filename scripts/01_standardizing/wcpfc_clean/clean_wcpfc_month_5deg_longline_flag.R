@@ -5,8 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# This R script processes raw purse seine tuna catch and effort data from the
-# WCPFC at the quarter, 5 degree level with flag data.
+# This R script processes raw longline tuna catch and effort data from the
+# WCPFC at the month, 5 degree level with flag data.
 #
 ################################################################################
 
@@ -20,7 +20,7 @@ library(countrycode)
 
 ## Load data -------------------------------------------------------------------
 
-quarter_5deg_flag_raw <- read_csv("data/raw/wcpfc/quarter_5deg_purseseine_flag/quarter_5deg_purseseine_flag.csv") |>
+month_5deg_raw <- read_csv("data/raw/wcpfc/month_5deg_longline_flag/month_5deg_longline_flag.csv") |>
   clean_names()
 
 ## Build function to clean and center lat/lon variables ------------------------
@@ -37,13 +37,14 @@ parse_and_center <- function(x, offset = 0) {
 
 ## Clean data ------------------------------------------------------------------
 
-wcpfc_quarter_5deg_purseseine_flag_clean <- quarter_5deg_flag_raw |>
+clean <- month_5deg_raw |>
   rename(
     year = yy,
-    quarter = qtr,
-    effort_day = days,
+    month = mm,
+    effort_hooks = hhooks, # hundreds of hooks
     flag = flag_code
   ) |>
+
   # Convert SW corner to center
   mutate(
     lat = parse_and_center(lat5, offset = 2.5),   # Convert corner to center
@@ -53,31 +54,40 @@ wcpfc_quarter_5deg_purseseine_flag_clean <- quarter_5deg_flag_raw |>
     flag = countrycode(flag, "iso2c", "iso3c",
                        custom_match = c("SU" = "SUN")),
 
-    # Effort
-    effort_set = rowSums(across(
-      c(sets_una, sets_log, sets_dfad, sets_afad, sets_oth)), na.rm = TRUE),  # Total sets across all set types
-    catch_skj = rowSums(across(
-      c(skj_c_una, skj_c_log, skj_c_dfad, skj_c_afad, skj_c_oth)), na.rm = TRUE),  # Species specific catches
-    catch_bet = rowSums(across(
-      c(bet_c_una, bet_c_log, bet_c_dfad, bet_c_afad, bet_c_oth)), na.rm = TRUE),
-    catch_alb = 0,  # ALB not reported in WCPFC PS data
+    # Species specific catch in mt
+    catch_bet_mt = bet_c,
+    catch_alb_mt = alb_c,
+    catch_yft_mt = yft_c,
+
+    # Species specific catch in numbers
+    catch_bet_n = bet_n,
+    catch_alb_n = alb_n,
+    catch_yft_n = yft_n,
+
+    # Total catch (metric tons + numbers)
+    catch_tot_mt = rowSums(across(c(catch_bet_mt, catch_alb_mt, catch_yft_mt)), na.rm = TRUE),
+    catch_tot_n = rowSums(across(c(catch_bet_n, catch_alb_n, catch_yft_n)), na.rm = TRUE),
+
     rfmo = "wcpfc"
   ) |>
-  # Total catch across the three species (sums if NAs exist)
-  mutate(
-    catch_tot = rowSums(across(c(catch_skj, catch_alb, catch_bet)), na.rm = TRUE)
-  ) |>
-  # Remove all NA or all 0 species rows
+
+  # Remove rows where all three species are NA or all zero
   filter(
-    !if_all(c(catch_skj, catch_alb, catch_bet), is.na),       # remove rows where all are NA
-    !if_all(c(catch_skj, catch_alb, catch_bet), ~ .x == 0)    # remove rows where all are 0
+    !if_all(c(catch_bet_mt, catch_alb_mt, catch_yft_mt,
+              catch_bet_n, catch_alb_n, catch_yft_n), is.na),
+    !if_all(c(catch_bet_mt, catch_alb_mt, catch_yft_mt,
+              catch_bet_n, catch_alb_n, catch_yft_n), ~ .x == 0)
   ) |>
+
+  # Can rearrange if needed
   select(
-    rfmo, flag, lon, lat, year, quarter,
-    effort_set, effort_day,
-    catch_tot, catch_skj,
-    catch_alb, catch_bet
+    rfmo, flag, lon, lat, year, month,
+    effort_hooks,
+    catch_tot_mt, catch_tot_n,
+    catch_bet_mt, catch_bet_n,
+    catch_alb_mt, catch_alb_n,
+    catch_yft_mt, catch_yft_n
   )
 
 # EXPORT #######################################################################
-saveRDS(wcpfc_quarter_5deg_purseseine_flag_clean, "data/processed/wcpfc/wcpfc_quarter_5deg_purseseine_flag.rds")
+saveRDS(clean, "data/processed/wcpfc/wcpfc_month_5deg_longline_flag.rds")
