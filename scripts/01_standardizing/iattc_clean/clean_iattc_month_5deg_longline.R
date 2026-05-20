@@ -25,9 +25,13 @@ clean <- ll_raw |>
   rename(
     year = Year,
     month = Month,
-    effort_hooks = Hooks,
     lat = LatC5,
     lon = LonC5
+  ) |>
+
+  # Effort convert to 1000s of hooks
+  mutate(
+    effort_hooks = Hooks / 1000
   ) |>
 
   # Species-specific catch

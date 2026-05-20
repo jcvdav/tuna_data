@@ -26,7 +26,6 @@ clean <- ll_raw |>
     year = Year,
     month = Month,
     flag = Flag,
-    effort_hooks = Hooks,
     lat = LatC5,
     lon = LonC5
   ) |>
@@ -37,6 +36,11 @@ clean <- ll_raw |>
       flag == "Other" ~ NA_character_,
       TRUE ~ flag
     )
+  ) |>
+
+  # Effort convert to 1000s of hooks
+  mutate(
+    effort_hooks = Hooks / 1000
   ) |>
 
   # Species-specific catch
@@ -79,3 +83,4 @@ clean <- ll_raw |>
 
 # EXPORT #######################################################################
 saveRDS(clean, "data/processed/iattc/iattc_month_5deg_longline_flag.rds")
+

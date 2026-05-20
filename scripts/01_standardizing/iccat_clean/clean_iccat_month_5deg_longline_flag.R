@@ -15,7 +15,6 @@
 ## Load packages ---------------------------------------------------------------
 library(tidyverse)
 library(janitor)
-library(stringr)
 
 ## Load data -------------------------------------------------------------------
 iccat <- readRDS("data/raw/iccat/ms_database_all/iccat_database.rds")
@@ -93,6 +92,11 @@ iccat_month_flag <- t2ce_flagged |>
       eff2type == "NO.HOOKS" ~ eff2,
       TRUE ~ NA_real_
     )
+  ) |>
+
+  # Convert effort to thousands of hooks
+  mutate(
+    effort_hooks = effort_hooks / 1000
   ) |>
 
   # Convert catches depending on catch_unit

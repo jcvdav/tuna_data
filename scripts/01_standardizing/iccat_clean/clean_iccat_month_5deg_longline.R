@@ -69,6 +69,11 @@ iccat_ll_month_5deg_clean <- data |>
     )
   ) |>
 
+  # Convert effort to thousands of hooks
+  mutate(
+    effort_hooks = effort_hooks / 1000
+  ) |>
+
   # Convert catches depending on catch_unit
   mutate(
     # Metric tons (kg → mt)

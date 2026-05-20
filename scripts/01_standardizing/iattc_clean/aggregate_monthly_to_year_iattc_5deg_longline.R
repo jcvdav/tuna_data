@@ -27,7 +27,6 @@ ll_month <- ll_raw |>
     year = Year,
     month = Month,
     flag = Flag,
-    effort_hooks = Hooks,
     lat = LatC5,
     lon = LonC5
   ) |>
@@ -38,6 +37,11 @@ ll_month <- ll_raw |>
       flag == "Other" ~ NA_character_,
       TRUE ~ flag
     )
+  ) |>
+
+   # Effort convert to 1000s of hooks
+  mutate(
+    effort_hooks = Hooks / 1000
   ) |>
 
   # Species-specific catch

@@ -40,13 +40,15 @@ clean <- month_5deg_raw |>
   rename(
     year = yy,
     month = mm,
-    effort_hooks = hhooks # hundreds of hooks
   ) |>
 
   # Convert SW corner to center
   mutate(
     lat = parse_and_center(lat5, offset = 2.5),   # Convert corner to center
     lon = parse_and_center(lon5, offset = 2.5),
+
+    # Effort to thousands of hooks
+    effort_hooks = hhooks * 0.1,
 
     # Species specific catch in mt
     catch_bet_mt = bet_c,

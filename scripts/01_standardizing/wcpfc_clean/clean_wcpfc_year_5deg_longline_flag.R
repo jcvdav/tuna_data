@@ -39,7 +39,6 @@ parse_and_center <- function(x, offset = 0) {
 clean <- quarter_5deg_raw |>
   rename(
     year = yy,
-    effort_hooks = hhooks, # hundreds of hooks
     flag = flag_code
   ) |>
 
@@ -51,6 +50,9 @@ clean <- quarter_5deg_raw |>
     # Convert ISO-2 → ISO-3 (keep NA as NA)
     flag = countrycode(flag, "iso2c", "iso3c",
                        custom_match = c("SU" = "SUN")),
+
+    # Effort to thousands of hooks
+    effort_hooks = hhooks * 0.1,
 
     # Species specific catch in mt
     catch_bet_mt = bet_c,

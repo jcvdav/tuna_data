@@ -84,6 +84,9 @@ iccat_year_flag <- t2ce_flagged |>
       TRUE ~ NA_real_
     ),
 
+    # Convert effort to thousands of hooks
+    effort_hooks = effort_hooks / 1000,
+
     # Convert catches depending on catch_unit
     catch_bet_mt = if_else(catch_unit == "kg", bet / 1000, NA_real_),
     catch_alb_mt = if_else(catch_unit == "kg", alb / 1000, NA_real_),
