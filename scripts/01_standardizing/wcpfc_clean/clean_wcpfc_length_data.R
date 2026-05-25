@@ -5,7 +5,8 @@
 # Emily Rodriguez
 # ecr108@miami.edu
 #
-# This R script cleans length data from the WCPFC.
+# This R script cleans length data from the WCPFC. It selects for tunas measured
+# using UF at a 5x5 degree resolution.
 #
 ################################################################################
 
@@ -33,7 +34,7 @@ parse_and_center <- function(x, offset = 0) {
 tuna_species <- c("ALB", "BET", "SKJ", "YFT")
 
 tuna_length <- length_data |>
-  filter(astrat == "5") |>      # 5×5 grid only
+  filter(astrat == "5") |>      # 5x5 grid only
   filter(sp_id %in% tuna_species) |>   # tuna only
   filter(len_code == "UF") |>   # tuna use UF
 
@@ -66,4 +67,4 @@ tuna_length <- length_data |>
   )
 
 # EXPORT #######################################################################
-saveRDS(tuna_length, "data/output/wcpfc_legth_data")
+saveRDS(tuna_length, "data/output/wcpfc_legth_data.rds")
