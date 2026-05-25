@@ -26,7 +26,7 @@ tuna_all_year <- bind_rows(
   iattc_year,
   wcpfc_year
 ) |>
-  arrange(year, lat, lon, flag)
+  arrange(year, flag)
 
 # EXPORT #######################################################################
 

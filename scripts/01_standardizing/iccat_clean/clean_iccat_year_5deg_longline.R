@@ -1,12 +1,12 @@
 ################################################################################
-# Clean ICCAT purse seine yearly flag data
+# Clean ICCAT purse seine yearly data
 ################################################################################
 #
 # Emily Rodriguez
 # ecr108@miami.edu
 #
 # This R script processes raw longline tuna catch and effort data from the
-# ICCAT at the 5 degree, yearly level with flag data.
+# ICCAT at the 5 degree, yearly level.
 #
 ################################################################################
 
@@ -20,17 +20,6 @@ library(janitor)
 iccat <- readRDS("data/raw/iccat/ms_database_all/iccat_database.rds")
 
 t2ce <- iccat$t2ce |> clean_names()
-flags <- iccat$Flags |> clean_names()
-
-# Join flag metadata -----------------------------------------------------------
-
-t2ce_flagged <- iccat$t2ce |>
-  clean_names() |>
-  left_join(
-    iccat$Flags |> clean_names(),
-    by = "fleet_id"
-  ) |>
-  rename(flag = flag_code)
 
 ## Build function to center lat/lon from SW corner
 
@@ -53,7 +42,7 @@ center_iccat <- function(lat, lon, quad_id) {
 # PROCESSING ###################################################################
 
 ## Clean data ------------------------------------------------------------------
-iccat_year_flag <- t2ce_flagged |>
+iccat_year <- t2ce |>
   filter(
     gear_grp_code == "LL",        # longline only
     square_type_code == "5x5",    # 5° grid
@@ -69,13 +58,6 @@ iccat_year_flag <- t2ce_flagged |>
     lon = centered$lon,
 
     rfmo = "iccat",
-
-    # Clean flag codes
-    flag = case_when(
-      str_starts(flag, "EU-") ~ str_remove(flag, "EU-"),
-      flag %in% c("MIX-FIS", "NEI-001") ~ NA_character_,
-      TRUE ~ flag
-    ),
 
     # Standardize effort
     effort_hooks = case_when(
@@ -110,7 +92,7 @@ iccat_year_flag <- t2ce_flagged |>
   ) |>
 
   # Year aggregation
-  group_by(rfmo, flag, lon, lat, year) |>
+  group_by(rfmo, lon, lat, year) |>
   summarise(
     effort_hooks = sum(effort_hooks, na.rm = TRUE),
 
@@ -128,8 +110,8 @@ iccat_year_flag <- t2ce_flagged |>
 
     .groups = "drop"
   ) |>
-  arrange(year, lat, lon, flag)
+  arrange(year, lat, lon)
 
 # EXPORT #######################################################################
 
-saveRDS(iccat_year_flag, "data/processed/iccat/iccat_year_5deg_longline_flag.rds")
+saveRDS(iccat_year, "data/processed/iccat/iccat_year_5deg_longline.rds")

@@ -1,5 +1,5 @@
 ################################################################################
-# Check and export overlapping cells
+# Check and export overlapping cells - Purse seine
 ################################################################################
 #
 # Emily Rodriguez
