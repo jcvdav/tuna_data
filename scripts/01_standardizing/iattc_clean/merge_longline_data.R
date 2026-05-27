@@ -84,10 +84,11 @@ iattc_merged <- full_join(num_sub, mt_sub, by = keys)
 
 # Identify all species prefixes
 species <- names(iattc_merged) |>
-  str_extract("^[A-Z]{3}(?=n$|mt$)") |>
+  str_extract("^[A-Z]{3}(?=n$|mt$)") |> # Regular expression to match three upper case letters followed by either n or mt
   na.omit() |>
   unique()
 
+# Iterate over species
 for (sp in species) {
 
   n <- paste0(sp, "n")   # numbers column name
