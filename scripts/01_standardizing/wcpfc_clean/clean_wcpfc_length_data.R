@@ -33,38 +33,53 @@ parse_and_center <- function(x, offset = 0) {
 
 tuna_species <- c("ALB", "BET", "SKJ", "YFT")
 
+gear_lookup <- c(
+  L = "longline",
+  S = "purse_seine",
+  P = "pole_line",
+  H = "handline_large",
+  K = "handline_small",
+  T = "troll",
+  R = "ringnet"
+)
+
 tuna_length <- length_data |>
-  filter(astrat == "5") |>      # 5x5 grid only
-  filter(sp_id %in% tuna_species) |>   # tuna only
-  filter(len_code == "UF") |>   # tuna use UF
+  filter(
+    astrat == "5",             # 5x5 grid only
+    sp_id %in% tuna_species,   # tuna only
+    len_code == "UF",          # tuna use UF
+    lstrat %in% c(1, 2)) |>    # remove 5 cm bins
 
   mutate(
     rfmo = "wcpfc",
 
     # temporal
-    year    = as.integer(yr),
-    month   = ifelse(tstrat == "M", as.integer(mon), NA_integer_),
+    year = as.integer(yr),
+    month = ifelse(tstrat == "M", as.integer(mon), NA_integer_),
     quarter = as.integer(qtr),
 
     # spatial
     lat = parse_and_center(lat, offset = 2.5),
     lon = parse_and_center(lon, offset = 2.5),
 
-    # other
-    species     = sp_id,
-    gear        = gr,
-    length_cm   = as.integer(len),
-    length_bin  = as.integer(lstrat),
-    length_type = len_code,
-    freq        = as.integer(freq),
+    # categorical
+    species = sp_id,
+    gear = recode(gr, !!!gear_lookup, .default = NA_character_),
+
+    # length data
+    length_cm = as.integer(len),
+    length_bin = as.integer(lstrat),
+    freq = as.integer(freq),
   ) |>
+
+  uncount(freq) |> # one row per measurement
 
   select(
     rfmo, lon, lat,
-    year, quarter, month, gear,
+    year, quarter, month, tstrat, gear,
     species,
-    length_cm, length_bin, length_type, freq
+    length_cm, length_bin
   )
 
 # EXPORT #######################################################################
-saveRDS(tuna_length, "data/output/wcpfc_legth_data.rds")
+saveRDS(tuna_length, "data/output/wcpfc_length_data.rds")
