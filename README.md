@@ -30,24 +30,33 @@ Management Organizations (RFMOs).
     - `results/tab`:
 
 
-## Defined variables in cleaned data
+## Defined variables in cleaned data for catch and effort
 
-| Variables    | Description                                       |
-|--------------|---------------------------------------------------|
-| `rfmo`       | Related RFMO                                      |
-| `flag`       | Flag code in ISO 3166-1 alpha-3 (excluding `SUN`) |
-| `lon`        | Longitude of fishing activity                     |
-| `lat`        | Latitude of the fishing activity                  |
-| `year`       | Year of record                                    |
-| `month`      | Month of record                                   |
-| `effort_set` | Number of fishing sets                            |
-| `effort_day` | Number of fishing days                            |
-| `catch_tot`  | Total catch (mt)                                  |
-| `catch_skj`  | Catch of skipjack tuna (mt)                       |
-| `catch_alb`  | Catch of albacore tuna (mt)                       |
-| `catch_bet`  | Catch of bigeye tuna (mt)                         |
-| `catch_yft`  | Catch of yellowfin tuna (mt)                      |
+| Variables        | Description                                       |
+|------------------|---------------------------------------------------|
+| `rfmo`           | Related RFMO                                      |
+| `flag`           | Flag code in ISO 3166-1 alpha-3 (excluding `SUN`) |
+| `lon`            | Longitude of fishing activity                     |
+| `lat`            | Latitude of the fishing activity                  |
+| `year`           | Year of record                                    |
+| `month`          | Month of record                                   |
+| `effort_set`     | Number of fishing sets                            |
+| `effort_day`     | Number of fishing days                            |
+| `effort_t_hooks` | Thousands of hooks                                |
+| `catch_tot`      | Total catch (mt)                                  |
+| `catch_skj`      | Catch of skipjack tuna (mt)                       |
+| `catch_alb`      | Catch of albacore tuna (mt)                       |
+| `catch_bet`      | Catch of bigeye tuna (mt)                         |
+| `catch_yft`      | Catch of yellowfin tuna (mt)                      |
 
+## Additional variables specific to length datasets
+
+| `tstrat`     | Temporal stratification                                      |
+|--------------|--------------------------------------------------------------|
+| `gear`       | Gear type                                                    |
+| `species`    | Tuna species                                                 |
+| `length_cm`  | Fish length in centimeters                                   |
+| `length_bin` | Length class/bin in cm based on interval (e.g., 1,2 cm bins) |
 
 ## Harmonized datasets
 ##### File path under: [data/output](data/output)
@@ -56,16 +65,24 @@ Management Organizations (RFMOs).
 | purse seine | 1°×1°   | month    | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_1deg_purseseine.rds`     |
 | purse seine | 1°×1°   | year     | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine.rds`      |
 | purse seine | 1°×1°   | year     | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine_flag.rds` |
+| longline    | 5°×5°   | month    | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline.rds`       |
+| longline    | 5°×5°   | month    | yes     | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline_flag.rds`  |
+| longline    | 5°×5°   | year     | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline.rds`        |
+| longline    | 5°×5°   | year     | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline_flag.rds`   |
 
 ## Cleaned catch and effort data sets by RFMO
 
 ### IATTC
 ##### File path under: [data/processed/iattc](data/processed/iattc)
-| Gear        | Spatial | Temporal | By flag | Dataset                               |
-|-------------|---------|----------|---------|---------------------------------------|
-| purse seine | 1°×1°   | month    | no      | `iattc_month_1deg_purseseine.rds`     |
-| purse seine | 1°×1°   | year     | no      | `iattc_year_1deg_purseseine.rds`      |
-| purse seine | 1°×1°   | year     | yes     | `iattc_year_1deg_purseseine_flag.rds` |
+| Gear        | Spatial | Temporal | By flag | Dataset                               | Dataset                                 |
+|-------------|---------|----------|---------|---------------------------------------|-----------------------------------------|
+| purse seine | 1°×1°   | month    | no      | `iattc_month_1deg_purseseine.rds`     | `allrfmo_month_1deg_purseseine.rds`     |
+| purse seine | 1°×1°   | year     | no      | `iattc_year_1deg_purseseine.rds`      | `allrfmo_year_1deg_purseseine.rds`      |
+| purse seine | 1°×1°   | year     | yes     | `iattc_year_1deg_purseseine_flag.rds` | `allrfmo_year_1deg_purseseine_flag.rds` |
+| longline    | 5°×5°   | month    | no      | `iattc_month_5deg_longline.rds`       | `allrfmo_month_5deg_longline.rds`       |
+| longline    | 5°×5°   | month    | yes     | `iattc_month_5deg_longline_flag.rds`  | `allrfmo_month_5deg_longline_flag.rds`  |
+| longline    | 5°×5°   | year     | no      | `iattc_year_5deg_longline.rds`        | `allrfmo_year_5deg_longline.rds`        |
+| longline    | 5°×5°   | year     | yes     | `iattc_year_5deg_longline_flag.rds`   | `allrfmo_year_5deg_longline_flag.rds`   |
 
 ### ICCAT
 ##### File path under: [data/processed/iccat](data/processed/iccat)
@@ -74,6 +91,10 @@ Management Organizations (RFMOs).
 | purse seine | 1°×1°   | month    | no      | `iccat_month_1deg_purseseine.rds`     |
 | purse seine | 1°×1°   | year     | no      | `iccat_year_1deg_purseseine.rds`      |
 | purse seine | 1°×1°   | year     | yes     | `iccat_year_1deg_purseseine_flag.rds` |
+| longline    | 5°×5°   | month    | no      | `iccat_month_5deg_longline.rds`       |
+| longline    | 5°×5°   | month    | yes     | `iccat_month_5deg_longline_flag.rds`  |
+| longline    | 5°×5°   | year     | no      | `iccat_year_5deg_longline.rds`        |
+| longline    | 5°×5°   | year     | yes     | `iccat_year_5deg_longline_flag.rds`   |
 
 ### IOTC
 ##### File path under: [data/processed/iotc](data/processed/iotc)
@@ -89,6 +110,10 @@ Management Organizations (RFMOs).
 | purse seine | 1°×1°   | year     | yes     | `wcpfc_year_1deg_purseseine_flag.rds`    |
 | purse seine | 1°×1°   | year     | no      | `wcpfc_year_1deg_purseseine.rds`         |
 | purse seine | 5°×5°   | year     | no      | `wcpfc_year_5deg_purseseine.rds`         |
+| longline    | 5°×5°   | month    | no      | `wcpfc_month_5deg_longline.rds`          |
+| longline    | 5°×5°   | month    | yes     | `wcpfc_month_5deg_longline_flag.rds`     |
+| longline    | 5°×5°   | quarter  | yes     | `wcpfc_quarter_5deg_longline_flag.rds`   |
+| longline    | 5°×5°   | year     | yes     | `wcpfc_year_5deg_longline_flag.rds`      |
 
 ## Raw catch and effort data sets by RFMO (Last updated January 2026)
 
@@ -127,6 +152,7 @@ Management Organizations (RFMOs).
 ### WCPFC
 ##### Source: https://www.wcpfc.int/sustainability/scientific-data/wcpfc-public-domain-aggregated-catcheffort-data-download-page
 ##### File path under: [data/raw/wcpfc](data/raw/wcpfc)
+##### Length data under: [data/raw/wcpfc/length_data](data/raw/wcpfc/legnth_data)
 
 | Gear          | Spatial | Temporal | Organized by | Measurement type                      | Species  | Base path                      | Dataset                            | Metadata                  |
 |---------------|---------|----------|--------------|---------------------------------------|----------|--------------------------------|------------------------------------|---------------------------|
@@ -136,7 +162,7 @@ Management Organizations (RFMOs).
 | longline      | 5°×5°   | month    | flag         | metric tons and number of individuals | multi    | `month_5deg_longline_flag`     | `month_5deg_longline_flag.csv`     | `Longline.pdf`            |
 | pole and line | 5°×5°   | month    | -            | metric tons                           | multi    | `month_5deg_poleline`          | `month_5deg_poleline.csv`          | `Pole_and_line.pdf`       |
 | purse seine   | 5°×5°   | month    | -            | metric tons                           | tuna     | `month_5deg_purseseine`        | `month_5deg_purseseine.csv`        | `Purse_seine.pdf`         |
-| pole and line | 1°×1°   | quarter  | flag         | metric tons                           | tuna     | `quarter_1deg_poleline`        | `quarter_1deg_poleline.csv`        | `Pole_and_line.pdf`       |
+| pole and line | 1°×1°   | quarter  | -            | metric tons                           | tuna     | `quarter_1deg_poleline`        | `quarter_1deg_poleline.csv`        | `Pole_and_line.pdf`       |
 | purse seine   | 1°×1°   | quarter  | flag         | metric tons                           | tuna     | `quarter_1deg_purseseine_flag` | `quarter_1deg_purseseine_flag.csv` | `Purse_seine.pdf`         |
 | longline      | 5°×5°   | quarter  | flag         | metric tons and number of individuals | multi    | `quarter_5deg_longline_flag`   | `quarter_5deg_longline_flag.csv`   | `Longline.pdf`            |
 | purse seine   | 5°×5°   | quarter  | flag         | metric tons                           | tuna     | `quarter_5deg_purseseine_flag` | `quarter_5deg_purseseine_flag.csv` | `Purse_seine.pdf`         |
