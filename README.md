@@ -51,8 +51,9 @@ Management Organizations (RFMOs).
 
 ## Additional variables specific to length datasets
 
-| `tstrat`     | Temporal stratification                                      |
+| Variables    | Description                                                  |
 |--------------|--------------------------------------------------------------|
+| `tstrat`     | Temporal stratification                                      |
 | `gear`       | Gear type                                                    |
 | `species`    | Tuna species                                                 |
 | `length_cm`  | Fish length in centimeters                                   |
