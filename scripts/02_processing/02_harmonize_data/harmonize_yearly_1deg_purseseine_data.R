@@ -23,7 +23,7 @@ library(tidyverse)
 
 # Load data --------------------------------------------------------------------
 yearly_bound <- readRDS("data/processed/01_bound/allrfmo_year_1deg_purseseine.rds")
-yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_overlap_cells.rds")
+yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_overlap_cells_purseseine.rds")
 
 # PROCESSING ###################################################################
 

@@ -23,7 +23,7 @@ library(tidyverse)
 
 # Load data --------------------------------------------------------------------
 yearly_flag_bound <- readRDS("data/processed/01_bound/allrfmo_year_1deg_purseseine_flag.rds")
-yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_flag_overlap_cells.rds")
+yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_flag_overlap_cells_purseseine.rds")
 
 # PROCESSING ###################################################################
 # Harmonize --------------------------------------------------------------------
@@ -59,3 +59,4 @@ yearly_flag_final <- yearly_flag_bound |>
 
 # EXPORT #######################################################################
 saveRDS(yearly_flag_final, "data/output/allrfmo_year_1deg_purseseine_flag.rds")
+

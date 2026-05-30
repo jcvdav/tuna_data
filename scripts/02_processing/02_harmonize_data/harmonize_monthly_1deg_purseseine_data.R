@@ -24,7 +24,7 @@ library(tidyverse)
 # Load data --------------------------------------------------------------------
 
 monthly_bound <- readRDS("data/processed/01_bound/allrfmo_month_1deg_purseseine.rds")
-monthly_overlap_cells <- readRDS("data/processed/01_bound/monthly_overlap_cells.rds")
+monthly_overlap_cells <- readRDS("data/processed/01_bound/monthly_overlap_cells_purseseine.rds")
 
 # PROCESSING ###################################################################
 

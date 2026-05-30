@@ -223,14 +223,14 @@ table(yearly_compare$effort_winner)
 yearly_overlap_cells <- yearly_overlap |>
   distinct(lat, lon, year)
 
-saveRDS(yearly_overlap_cells, "data/processed/01_bound/yearly_overlap_cells.rds")
+saveRDS(yearly_overlap_cells, "data/processed/01_bound/yearly_overlap_cells_purseseine.rds")
 
 monthly_overlap_cells <- monthly_overlap |>
   distinct(lat, lon, year, month)
 
-saveRDS(monthly_overlap_cells,"data/processed/01_bound/monthly_overlap_cells.rds")
+saveRDS(monthly_overlap_cells,"data/processed/01_bound/monthly_overlap_cells_purseseine.rds")
 
 yearly_flag_overlap_cells <- yearly_flag_overlap |>
   distinct(lat, lon, year)
 
-saveRDS(yearly_flag_overlap_cells,"data/processed/01_bound/yearly_flag_overlap_cells.rds")
+saveRDS(yearly_flag_overlap_cells,"data/processed/01_bound/yearly_flag_overlap_cells_purseseine.rds")
