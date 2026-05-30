@@ -85,7 +85,7 @@ iccat_year_flag <- t2ce_flagged |>
     ),
 
     # Convert effort to thousands of hooks
-    effort_hooks = effort_hooks / 1000,
+    effort_t_hooks = effort_hooks / 1000,
 
     # Convert catches depending on catch_unit
     catch_bet_mt = if_else(catch_unit == "kg", bet / 1000, NA_real_),
@@ -112,7 +112,7 @@ iccat_year_flag <- t2ce_flagged |>
   # Year aggregation
   group_by(rfmo, flag, lon, lat, year) |>
   summarise(
-    effort_hooks = sum(effort_hooks, na.rm = TRUE),
+    effort_t_hooks = sum(effort_hooks, na.rm = TRUE),
 
     catch_tot_mt = sum(catch_tot_mt, na.rm = TRUE),
     catch_tot_n  = sum(catch_tot_n,  na.rm = TRUE),

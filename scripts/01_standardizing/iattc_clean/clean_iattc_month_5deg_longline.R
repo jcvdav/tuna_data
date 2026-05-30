@@ -31,7 +31,7 @@ clean <- ll_raw |>
 
   # Effort convert to 1000s of hooks
   mutate(
-    effort_hooks = Hooks / 1000
+    effort_t_hooks = Hooks / 1000
   ) |>
 
   # Species-specific catch
@@ -65,7 +65,7 @@ clean <- ll_raw |>
 
   select(
     rfmo, lon, lat, year, month,
-    effort_hooks,
+    effort_t_hooks,
     catch_tot_mt, catch_tot_n,
     catch_bet_mt, catch_bet_n,
     catch_alb_mt, catch_alb_n,

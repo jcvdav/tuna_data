@@ -96,7 +96,7 @@ iccat_month_flag <- t2ce_flagged |>
 
   # Convert effort to thousands of hooks
   mutate(
-    effort_hooks = effort_hooks / 1000
+    effort_t_hooks = effort_hooks / 1000
   ) |>
 
   # Convert catches depending on catch_unit
@@ -128,7 +128,7 @@ iccat_month_flag <- t2ce_flagged |>
 
   select(
     rfmo, flag, lon, lat, year, month,
-    effort_hooks,
+    effort_t_hooks,
     catch_tot_mt, catch_tot_n,
     catch_bet_mt, catch_bet_n,
     catch_alb_mt, catch_alb_n,

@@ -41,7 +41,7 @@ ll_month <- ll_raw |>
 
   # Effort convert to 1000s of hooks
   mutate(
-    effort_hooks = Hooks / 1000
+    effort_t_hooks = Hooks / 1000
   ) |>
 
   # Species-specific catch
@@ -75,7 +75,7 @@ ll_month <- ll_raw |>
 
   select(
     rfmo, flag, lon, lat, year, month,
-    effort_hooks,
+    effort_t_hooks,
     catch_tot_mt, catch_tot_n,
     catch_bet_mt, catch_bet_n,
     catch_alb_mt, catch_alb_n,
@@ -89,7 +89,7 @@ ll_year <- ll_month |>
 
   # Sum effort and catch across months
   summarize(
-    effort_hooks = sum(effort_hooks, na.rm = TRUE),
+    effort_t_hooks = sum(effort_t_hooks, na.rm = TRUE),
 
     catch_tot_mt = sum(catch_tot_mt, na.rm = TRUE),
     catch_tot_n  = sum(catch_tot_n,  na.rm = TRUE),
@@ -117,7 +117,7 @@ ll_year <- ll_month |>
   # Final column order
   select(
     rfmo, flag, lon, lat, year,
-    effort_hooks,
+    effort_t_hooks,
     catch_tot_mt, catch_tot_n,
     catch_bet_mt, catch_bet_n,
     catch_alb_mt, catch_alb_n,

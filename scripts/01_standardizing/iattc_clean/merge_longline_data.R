@@ -93,11 +93,8 @@ for (sp in species) {
   n <- paste0(sp, "n")   # numbers column name
   m <- paste0(sp, "mt")  # metric tons column name
 
-  # Skip if one of the pair is missing for some reason
-  if (!all(c(n, m) %in% names(iattc_merged))) next
-
-  n_val <- as.numeric(iattc_merged[[n]])
-  m_val <- as.numeric(iattc_merged[[m]])
+  n_val <- as.numeric(iattc_merged[[n]])  # number values
+  m_val <- as.numeric(iattc_merged[[m]])  # metric tons values
 
   # numbers = 0, mt > 0  → numbers not reported → set numbers to NA
   n_missing <- !is.na(n_val) & !is.na(m_val) & n_val == 0 & m_val > 0
@@ -113,70 +110,33 @@ for (sp in species) {
 }
 
 ## Checks ######################################################################
+
+# 1. Keys identical across files -----------------------------------------------
 all.equal(iattc_num[keys], iattc_mt[keys])
-# True = keys the same
+# TRUE = both files refer to the same fishing events
 
-# duplicates
 
+# 2. Join did not create duplicates --------------------------------------------
 nrow(iattc_merged) == nrow(iattc_num)
-# True = join did not create duplicates
+# TRUE = full_join preserved 1:1 structure
 
-# check lost info
-all.equal(
-  iattc_merged |> select(ends_with("n")),
-  num_sub |> select(ends_with("n"))
-)
-# True = all number data preserved
 
-all.equal(
-  iattc_merged |> select(ends_with("mt")),
-  mt_sub |> select(ends_with("mt"))
-)
-# true = all mt data preserved
+# 3. Zero→NA logic sanity checks -----------------------------------------------
 
-# id rows where both units exist
-iattc_merged <- iattc_merged |>
-  mutate(row_id = row_number())
+num_cols <- grep("n$",  names(iattc_merged), value = TRUE)
+mt_cols  <- grep("mt$", names(iattc_merged), value = TRUE)
 
-both_units <- iattc_merged |>
-  mutate(
-    has_num = rowSums(across(ends_with("n")), na.rm = TRUE) > 0,
-    has_mt  = rowSums(across(ends_with("mt")), na.rm = TRUE) > 0
-  ) |>
-  filter(has_num & has_mt)
+# Case A: numbers == 0 but mt > 0 → numbers should be NA
+raw_A  <- sum(iattc_num[num_cols] == 0 & iattc_mt[mt_cols] > 0, na.rm = TRUE)
+merged_A <- sum(is.na(iattc_merged[num_cols]) & iattc_mt[mt_cols] > 0, na.rm = TRUE)
 
-# check these rows match across files
-# For rows with both units, numbers must come from num file
-all(both_units$ALBn == iattc_num$ALBn[both_units$row_id])
+raw_A == merged_A
 
-# And weights must come from mt file
-all(both_units$ALBmt == iattc_mt$ALBmt[both_units$row_id])
+# Case B: mt == 0 but numbers > 0 → mt should be NA
+raw_B  <- sum(iattc_mt[mt_cols] == 0 & iattc_num[num_cols] > 0, na.rm = TRUE)
+merged_B <- sum(is.na(iattc_merged[mt_cols]) & iattc_num[num_cols] > 0, na.rm = TRUE)
 
-# Both true
-
-# Test single unit rows merged correctly
-only_num <- iattc_merged |>
-  filter(
-    rowSums(across(ends_with("n")), na.rm = TRUE) > 0 &
-      rowSums(across(ends_with("mt")), na.rm = TRUE) == 0
-  )
-
-all.equal(
-  iattc_num[keys][rownames(only_num), ],
-  iattc_mt[keys][rownames(only_num), ]
-)
-# True
-
-only_mt <- iattc_merged |>
-  filter(
-    rowSums(across(ends_with("n")), na.rm = TRUE) == 0 &
-      rowSums(across(ends_with("mt")), na.rm = TRUE) > 0
-  )
-all.equal(
-  iattc_num[keys][rownames(only_mt), ],
-  iattc_mt[keys][rownames(only_mt), ]
-)
-# True
+raw_B == merged_B
 
 
 # EXPORT #######################################################################

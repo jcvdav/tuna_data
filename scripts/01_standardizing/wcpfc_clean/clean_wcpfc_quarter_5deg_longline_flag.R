@@ -53,7 +53,7 @@ clean <- quarter_5deg_raw |>
                        custom_match = c("SU" = "SUN")),
 
     # Effort to thousands of hooks
-    effort_hooks = hhooks * 0.1,
+    effort_t_hooks = hhooks * 0.1,
 
     # Species specific catch in mt
     catch_bet_mt = bet_c,
@@ -83,7 +83,7 @@ clean <- quarter_5deg_raw |>
   # Can rearrange if needed
   select(
     rfmo, flag, lon, lat, year, quarter,
-    effort_hooks,
+    effort_t_hooks,
     catch_tot_mt, catch_tot_n,
     catch_bet_mt, catch_bet_n,
     catch_alb_mt, catch_alb_n,
