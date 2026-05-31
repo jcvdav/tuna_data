@@ -36,7 +36,7 @@ parse_and_center <- function(x, offset = 0) {
 
 ## Clean data ------------------------------------------------------------------
 
-clean <- quarter_5deg_raw |>
+clean <- year_5deg_raw |>
   rename(
     year = yy,
     flag = flag_code
