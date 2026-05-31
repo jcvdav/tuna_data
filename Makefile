@@ -32,25 +32,51 @@ PROC_WCPFC = data/processed/wcpfc/
 all: \
 	$(OUT)allrfmo_month_1deg_purseseine.rds \
 	$(OUT)allrfmo_year_1deg_purseseine.rds \
-	$(OUT)allrfmo_year_1deg_purseseine_flag.rds
+	$(OUT)allrfmo_year_1deg_purseseine_flag.rds \
+	$(OUT)allrfmo_month_5deg_longline.rds \
+	$(OUT)allrfmo_month_5deg_longline_flag.rds \
+	$(OUT)allrfmo_year_5deg_longline.rds \
+	$(OUT)allrfmo_year_5deg_longline_flag.rds
 
 iattc: \
 	$(PROC_IATTC)iattc_month_1deg_purseseine.rds \
 	$(PROC_IATTC)iattc_year_1deg_purseseine.rds \
-	$(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds
+	$(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds \
+	$(PROC_IATTC)iattc_month_5deg_longline.rds \
+	$(PROC_IATTC)iattc_month_5deg_longline_flag.rds \
+	$(PROC_IATTC)iattc_year_5deg_longline.rds \
+	$(PROC_IATTC)iattc_year_5deg_longline_flag.rds
 
 iccat: \
-	$(PROC_IATTC)iattc_month_1deg_purseseine.rds \
-	$(PROC_IATTC)iattc_year_1deg_purseseine.rds \
-	$(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds
+	$(PROC_ICCAT)iccat_month_1deg_purseseine.rds \
+	$(PROC_ICCAT)iccat_year_1deg_purseseine.rds \
+	$(PROC_ICCAT)iccat_year_1deg_purseseine_flag.rds \
+	$(PROC_ICCAT)iccat_month_5deg_longline.rds \
+	$(PROC_ICCAT)iccat_month_5deg_longline_flag.rds \
+	$(PROC_ICCAT)iccat_year_5deg_longline.rds \
+	$(PROC_ICCAT)iccat_year_5deg_longline_flag.rds
 
 wcpfc: \
 	$(PROC_WCPFC)wcpfc_month_1deg_purseseine.rds \
 	$(PROC_WCPFC)wcpfc_year_1deg_purseseine.rds \
-	$(PROC_WCPFC)wcpfc_year_1deg_purseseine_flag.rds
+	$(PROC_WCPFC)wcpfc_year_1deg_purseseine_flag.rds \
+	$(PROC_WCPFC)wcpfc_month_5deg_longline.rds \
+	$(PROC_WCPFC)wcpfc_month_5deg_longline_flag.rds \
+	$(PROC_WCPFC)wcpfc_year_5deg_longline_flag.rds \
+	$(OUT)wcpfc_length_data.rds
 
 ###############################
-# IATTC
+# IATTC data preparation
+###############################
+
+$(RAW_IATTC)month_5deg_longline_flag_merged.csv: \
+	$(ST_IATTC)merge_longline_data.R \
+	$(RAW_IATTC)month_5deg_longline_flag_mt.csv \
+	$(RAW_IATTC)month_5deg_longline_flag_num.csv
+	Rscript $<
+
+###############################
+# IATTC, purse seine
 ###############################
 
 # Month
@@ -65,46 +91,105 @@ $(PROC_IATTC)iattc_year_1deg_purseseine.rds: \
 	$(PROC_IATTC)iattc_month_1deg_purseseine.rds
 	Rscript $<
 
-# Year flag
+# Year, flag
 $(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds: \
 	$(ST_IATTC)aggregate_monthly_to_year_iattc_1deg_purseseine_flag.R \
 	$(RAW_IATTC)month_1deg_purseseine/month_1deg_purseseine_flag.csv
 	Rscript $<
 
 ###############################
-# ICCAT
+# IATTC, longline
 ###############################
 
-# Data converter
+# Month
+$(PROC_IATTC)iattc_month_5deg_longline.rds: \
+	$(ST_IATTC)clean_iattc_month_5deg_longline.R \
+	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.rds
+	Rscript $<
+
+# Month, flag
+$(PROC_IATTC)iattc_month_5deg_longline_flag.rds: \
+	$(ST_IATTC)clean_iattc_month_5deg_longline_flag.R \
+	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.rds
+	Rscript $<
+
+# Year
+$(PROC_IATTC)iattc_year_5deg_longline.rds: \
+	$(ST_IATTC)aggregate_monthly_to_year_iattc_5deg_longline.R \
+	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.rds
+	Rscript $<
+
+# Year, flag
+$(PROC_IATTC)iattc_year_5deg_longline_flag.rds: \
+	$(ST_IATTC)aggregate_monthly_to_year_iattc_5deg_longline_flag.R \
+	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.rds
+	Rscript $<
+
+###############################
+# ICCAT data preparation
+###############################
+
 $(RAW_ICCAT)ms_database_all/iccat_database.rds: \
 	$(ST_ICCAT)convert_iccat_mdb_to_rds.R \
 	$(RAW_ICCAT)ms_database_all/ms_database_all.mdb
 	Rscript $(<)
 
-# Cleaned data
-## Month
+###############################
+# ICCAT, purse seine
+###############################
+
+# Month
 $(PROC_ICCAT)iccat_month_1deg_purseseine.rds: \
 	$(ST_ICCAT)clean_iccat_month_1deg_purseseine.R \
 	$(RAW_ICCAT)ms_database_all/iccat_database.rds
 	Rscript $<
 
-## Year
+# Year
 $(PROC_ICCAT)iccat_year_1deg_purseseine.rds: \
 	$(ST_ICCAT)clean_iccat_year_1deg_purseseine.R \
 	$(RAW_ICCAT)ms_database_all/iccat_database.rds
 	Rscript $<
 
-## Year flag
+# Year, flag
 $(PROC_ICCAT)iccat_year_1deg_purseseine_flag.rds: \
 	$(ST_ICCAT)clean_iccat_year_1deg_purseseine_flag.R \
 	$(RAW_ICCAT)ms_database_all/iccat_database.rds
 	Rscript $<
 
 ###############################
-# WCPFC
+# ICCAT, longline
 ###############################
 
-# month 5 deg, quarter 1 deg, quarter 5 deg, and year 5 deg data not accounted for here
+# Month
+$(PROC_ICCAT)iccat_month_5deg_longline.rds: \
+	$(ST_ICCAT)clean_iccat_month_5deg_longline.R \
+	$(RAW_ICCAT)ms_database_all/iccat_database.rds
+	Rscript $<
+
+# Month, flag
+$(PROC_ICCAT)iccat_month_5deg_longline_flag.rds: \
+	$(ST_ICCAT)clean_iccat_month_5deg_longline_flag.R \
+	$(RAW_ICCAT)ms_database_all/iccat_database.rds
+	Rscript $<
+
+# Year
+$(PROC_ICCAT)iccat_year_5deg_longline.rds: \
+	$(ST_ICCAT)clean_iccat_year_5deg_longline.R \
+	$(RAW_ICCAT)ms_database_all/iccat_database.rds
+	Rscript $<
+
+# Year, flag
+$(PROC_ICCAT)iccat_year_5deg_longline_flag.rds: \
+	$(ST_ICCAT)clean_iccat_year_5deg_longline_flag.R \
+	$(RAW_ICCAT)ms_database_all/iccat_database.rds
+	Rscript $<
+
+###############################
+# WCPFC, purse seine
+###############################
+
+# Month 5 deg, quarter 1 deg, quarter 5 deg, and year 5 deg data not accounted
+# for here
 
 # Month
 $(PROC_WCPFC)wcpfc_month_1deg_purseseine.rds: \
@@ -118,15 +203,36 @@ $(PROC_WCPFC)wcpfc_year_1deg_purseseine.rds: \
 	$(RAW_WCPFC)quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv
 	Rscript $<
 
-# Year flag
+# Year, flag
 $(PROC_WCPFC)wcpfc_year_1deg_purseseine_flag.rds: \
 	$(ST_WCPFC)aggregate_quarter_to_year_wcpfc_1deg_purseseine_flag.R \
 	$(RAW_WCPFC)quarter_1deg_purseseine_flag/quarter_1deg_purseseine_flag.csv
 	Rscript $<
 
+###############################
+# WCPFC, longline
+###############################
+
+# Month
+$(PROC_WCPFC)wcpfc_month_5deg_longline.rds: \
+	$(ST_WCPFC)clean_wcpfc_month_5deg_longline.R \
+	$(RAW_WCPFC)month_5deg_longline/month_5deg_longline.csv
+	Rscript $<
+
+# Month, flag
+$(PROC_WCPFC)wcpfc_month_5deg_longline_flag.rds: \
+	$(ST_WCPFC)clean_wcpfc_month_5deg_longline.R \
+	$(RAW_WCPFC)month_5deg_longline_flag/month_5deg_longline_flag.csv
+	Rscript $<
+
+# Year, flag
+$(PROC_WCPFC)wcpfc_year_5deg_longline_flag.rds: \
+	$(ST_WCPFC)clean_wcpfc_year_5deg_longline_flag.R \
+	$(RAW_WCPFC)year_5deg_longline_flag/year_5deg_longline_flag.csv
+	Rscript $<
 
 ###############################
-# Bind data
+# Bind data, purse seine
 ###############################
 
 # Month
@@ -145,7 +251,7 @@ $(DATA_BIND)allrfmo_year_1deg_purseseine.rds: \
 	$(PROC_WCPFC)wcpfc_year_1deg_purseseine.rds
 	Rscript $<
 
-# Year flag
+# Year, flag
 $(DATA_BIND)allrfmo_year_1deg_purseseine_flag.rds: \
 	$(PROC_BIND)bind_yearly_1deg_purseseine_flag.R \
 	$(PROC_IATTC)iattc_year_1deg_purseseine_flag.rds \
@@ -154,41 +260,133 @@ $(DATA_BIND)allrfmo_year_1deg_purseseine_flag.rds: \
 	Rscript $<
 
 # Detect overlap month
-$(DATA_BIND)monthly_overlap_cells.rds: \
-	$(PROC_BIND)detect_overlaps.R \
+$(DATA_BIND)monthly_overlap_cells_purseseine.rds: \
+	$(PROC_BIND)detect_overlaps_purseseine.R \
 	$(DATA_BIND)allrfmo_month_1deg_purseseine.rds
 	Rscript $<
 
 # Detect overlap year
-$(DATA_BIND)yearly_overlap_cells.rds: \
-	$(PROC_BIND)detect_overlaps.R \
+$(DATA_BIND)yearly_overlap_cells_purseseine.rds: \
+	$(PROC_BIND)detect_overlaps_purseseine.R \
 	$(DATA_BIND)allrfmo_year_1deg_purseseine.rds
 	Rscript $<
 
 # Detect overlap year flag
-$(DATA_BIND)yearly_flag_overlap_cells.rds: \
-	$(PROC_BIND)detect_overlaps.R \
+$(DATA_BIND)yearly_flag_overlap_cells_purseseine.rds: \
+	$(PROC_BIND)detect_overlaps_purseseine.R \
 	$(DATA_BIND)allrfmo_year_1deg_purseseine_flag.rds
 	Rscript $<
 
 ###############################
-# Harmonize data
+# Bind data, longline
+###############################
+
+# Month
+$(DATA_BIND)allrfmo_month_5deg_longline.rds: \
+	$(PROC_BIND)bind_monthly_5deg_longline.R \
+	$(PROC_IATTC)iattc_month_5deg_longline.rds \
+	$(PROC_ICCAT)iccat_month_5deg_longline.rds \
+	$(PROC_WCPFC)wcpfc_month_5deg_longline.rds
+	Rscript $<
+
+# Month, flag
+$(DATA_BIND)allrfmo_month_5deg_longline_flag.rds: \
+	$(PROC_BIND)bind_monthly_5deg_longline.R \
+	$(PROC_IATTC)iattc_month_5deg_longline_flag.rds \
+	$(PROC_ICCAT)iccat_month_5deg_longline_flag.rds \
+	$(PROC_WCPFC)wcpfc_month_5deg_longline_flag.rds
+	Rscript $<
+
+# Year
+$(DATA_BIND)allrfmo_year_5deg_longline.rds: \
+	$(PROC_BIND)bind_yearly_5deg_longline.R \
+	$(PROC_IATTC)iattc_year_5deg_longline.rds \
+	$(PROC_ICCAT)iccat_year_5deg_longline.rds \
+	$(PROC_WCPFC)wcpfc_year_5deg_longline_flag.rds
+	Rscript $<
+
+# Year, flag
+$(DATA_BIND)allrfmo_year_5deg_longline_flag.rds: \
+	$(PROC_BIND)bind_yearly_5deg_longline_flag.R \
+	$(PROC_IATTC)iattc_year_5deg_longline_flag.rds \
+	$(PROC_ICCAT)iccat_year_5deg_longline_flag.rds \
+	$(PROC_WCPFC)wcpfc_year_5deg_longline_flag.rds
+	Rscript $<
+
+# Detect overlap month
+$(DATA_BIND)monthly_overlap_cells_longline.rds: \
+	$(PROC_BIND)detect_overlaps_longline.R \
+	$(DATA_BIND)allrfmo_month_5deg_longline.rds
+	Rscript $<
+
+# Detect overlap month, flag
+$(DATA_BIND)monthly_flag_overlap_cells_longline.rds: \
+	$(PROC_BIND)detect_overlaps_longline.R \
+	$(DATA_BIND)allrfmo_month_5deg_longline_flag.rds
+	Rscript $<
+
+# Detect overlap year
+$(DATA_BIND)yearly_overlap_cells_longline.rds: \
+	$(PROC_BIND)detect_overlaps_longline.R \
+	$(DATA_BIND)allrfmo_year_5deg_longline.rds
+	Rscript $<
+
+# Detect overlap year flag
+$(DATA_BIND)yearly_flag_overlap_cells_longline.rds: \
+	$(PROC_BIND)detect_overlaps_longline.R \
+	$(DATA_BIND)allrfmo_year_5deg_longline_flag.rds
+	Rscript $<
+
+###############################
+# Harmonize data, purse seine
 ###############################
 
 $(OUT)allrfmo_month_1deg_purseseine.rds: \
-	$(PROC_HARM)harmonize_monthly_1deg_purseseine_data.R \
+	$(PROC_HARM)harmonize_monthly_1deg_purseseine.R \
 	$(DATA_BIND)allrfmo_month_1deg_purseseine.rds \
-	$(DATA_BIND)monthly_overlap_cells.rds
+	$(DATA_BIND)monthly_overlap_cells_purseseine.rds
 	Rscript $<
 
 $(OUT)allrfmo_year_1deg_purseseine.rds: \
-	$(PROC_HARM)harmonize_yearly_1deg_purseseine_data.R \
+	$(PROC_HARM)harmonize_yearly_1deg_purseseine.R \
 	$(DATA_BIND)allrfmo_year_1deg_purseseine.rds \
-	$(DATA_BIND)yearly_overlap_cells.rds
+	$(DATA_BIND)yearly_overlap_cells_purseseine.rds
 	Rscript $<
 
 $(OUT)allrfmo_year_1deg_purseseine_flag.rds: \
 	$(PROC_HARM)harmonize_yearly_1deg_purseseine_flag.R \
 	$(DATA_BIND)allrfmo_year_1deg_purseseine_flag.rds \
-	$(DATA_BIND)yearly_flag_overlap_cells.rds
+	$(DATA_BIND)yearly_flag_overlap_cells_purseseine.rds
 	Rscript $<
+
+###############################
+# Harmonize data, longline
+###############################
+
+$(OUT)allrfmo_month_5deg_longline.rds: \
+	$(PROC_HARM)harmonize_monthly_5deg_longline.R \
+	$(DATA_BIND)allrfmo_month_5deg_longline.rds \
+	$(DATA_BIND)monthly_overlap_cells_longline.rds
+	Rscript $<
+
+$(OUT)allrfmo_month_5deg_longline_flag.rds: \
+	$(PROC_HARM)harmonize_monthly_5deg_longline_flag.R \
+	$(DATA_BIND)allrfmo_month_5deg_longline_flag.rds \
+	$(DATA_BIND)monthly_flag_overlap_cells_longline.rds
+	Rscript $<
+
+$(OUT)allrfmo_year_5deg_longline.rds: \
+	$(PROC_HARM)harmonize_yearly_5deg_longline.R \
+	$(DATA_BIND)allrfmo_year_5deg_longline.rds \
+	$(DATA_BIND)yearly_overlap_cells_longline.rds
+	Rscript $<
+
+$(OUT)allrfmo_year_5deg_longline_flag.rds: \
+	$(PROC_HARM)harmonize_yearly_5deg_longline_flag.R \
+	$(DATA_BIND)allrfmo_year_5deg_longline_flag.rds \
+	$(DATA_BIND)yearly_flag_overlap_cells_longline.rds
+	Rscript $<
+
+###############################
+# WCPFC Length Data
+###############################
