@@ -1,8 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 # RFMO Tuna Catch and Effort Data
 
 ## Overview
