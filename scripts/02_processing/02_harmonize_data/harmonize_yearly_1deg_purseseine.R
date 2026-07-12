@@ -60,3 +60,4 @@ yearly_final <- yearly_bound |>
 
 # EXPORT #######################################################################
 saveRDS(yearly_final, "data/output/allrfmo_year_1deg_purseseine.rds")
+

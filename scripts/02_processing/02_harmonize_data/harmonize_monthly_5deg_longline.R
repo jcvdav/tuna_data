@@ -108,3 +108,4 @@ monthly_final <- monthly_bound |>
 # EXPORT #######################################################################
 
 saveRDS(monthly_final, "data/output/allrfmo_month_5deg_longline.rds")
+

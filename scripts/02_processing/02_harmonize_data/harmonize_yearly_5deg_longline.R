@@ -62,4 +62,5 @@ yearly_final <- yearly_bound |>
 
 # EXPORT #######################################################################
 
-saveRDS(yearly_final, "data/output/allrfmo_month_5deg_longline.rds")
+saveRDS(yearly_final, "data/output/allrfmo_year_5deg_longline.rds")
+
