@@ -36,7 +36,14 @@ all: \
 	$(OUT)allrfmo_month_5deg_longline.rds \
 	$(OUT)allrfmo_month_5deg_longline_flag.rds \
 	$(OUT)allrfmo_year_5deg_longline.rds \
-	$(OUT)allrfmo_year_5deg_longline_flag.rds
+	$(OUT)allrfmo_year_5deg_longline_flag.rds \
+	$(OUT)allrfmo_month_1deg_purseseine.csv \
+	$(OUT)allrfmo_year_1deg_purseseine.csv \
+	$(OUT)allrfmo_year_1deg_purseseine_flag.csv \
+	$(OUT)allrfmo_month_5deg_longline.csv \
+	$(OUT)allrfmo_month_5deg_longline_flag.csv \
+	$(OUT)allrfmo_year_5deg_longline.csv \
+	$(OUT)allrfmo_year_5deg_longline_flag.csv
 
 iattc: \
 	$(PROC_IATTC)iattc_month_1deg_purseseine.rds \
@@ -132,7 +139,7 @@ $(PROC_IATTC)iattc_year_5deg_longline_flag.rds: \
 $(RAW_ICCAT)ms_database_all/iccat_database.rds: \
 	$(ST_ICCAT)convert_iccat_mdb_to_rds.R \
 	$(RAW_ICCAT)ms_database_all/ms_database_all.mdb
-	Rscript $(<)
+	Rscript $<
 
 ###############################
 # ICCAT, purse seine
@@ -390,3 +397,11 @@ $(OUT)allrfmo_year_5deg_longline_flag.rds: \
 ###############################
 # WCPFC Length Data
 ###############################
+
+
+###############################
+# Export harmonized datasets to CSV
+###############################
+
+$(OUT)%.csv: $(OUT)%.rds
+	Rscript -e "write.csv(readRDS('$<'), '$@', row.names = FALSE)"
