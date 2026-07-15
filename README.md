@@ -15,7 +15,7 @@ Management Organizations (RFMOs).
 - `data/`:
     - `data/raw`: contains original datasets retrieved from RFMOs
     - `data/processed`: contains cleaned data from various RFMOs in a standardized format
-      - `processed/01_bound`: contains bound RFMO data sets at various resolutions
+      - `processed/01_bound`: contains bound RFMO datasets at various resolutions
     - `data/output`: contains harmonized RFMO datasets
 - `scripts/`:
     - `scripts/01_standardizing`: contains scripts that clean RFMO data 
@@ -40,7 +40,7 @@ Management Organizations (RFMOs).
 ### 2. **Data binding** (`02_processing/01_bind_data`)
 - **Input:** cleaned RMFO datasets
 - **Output:** multi-RFMO bound datasets at shared temporal/spatial resolution
-  - Cell overlaps between RFMOs detecte
+  - Cell overlaps between RFMOs detected
   - RFMO identity preserved
   - All datasets must share identical variables
 
@@ -62,7 +62,7 @@ The workflow consists of three stages. **Standardization** converts raw data pro
 from each RFMO into the project's standardized format, resolving any RFMO-specific formatting
 differences. **Data Binding** then merges standardized datasets that share the same 
 spatial and temporal resolution into a single multi-RFMO dataset while preserving the 
-identity of each RFMO and indentifying cells where multiple RFMOs report the same location
+identity of each RFMO and identifying cells where multiple RFMOs report the same location
 and time period. Finally, **harmonization** resolves those overlapping records according 
 to a set of rules, producing a single harmonized dataset that contains one record per spatial
 and temporal cell. 
@@ -121,7 +121,7 @@ file name and any corresponding scripts in `01_standardizing` are updated to han
 
 ## Data standards
 
-All cleaned data sets must use the following standardized variables
+All cleaned datasets must use the following standardized variables
 
 ### Standardized variables
 
@@ -205,7 +205,7 @@ All standardizing scripts should be stored under `scripts/01_standardizing/<rfmo
 #### **Aggregating data to a specific resolution if it is not available**
 
 In the case that a specific dataset does not exist for the final harmonized set 
-(ex.: WCPFC missing a yearly flag data set), aggregate the nearest dataset to the
+(ex.: WCPFC missing a yearly flag dataset), aggregate the nearest dataset to the
 required resolution, and name as follows:
 
 `aggregate_<original_resolution>_to_<new_resolution>_<rfmo>_<spatial_resolution>_<gear>_<aggregation>.R`
@@ -226,7 +226,7 @@ Binding scripts should be stored under `02_processing/01_bind_data`
 - Use `bind_rows` to combine datasets.
 - Arrange by temporal resolution and aggregation if applicable.
 
-### 4. Export bound data set to `data/processed/01_bound/`
+### 4. Export bound dataset to `data/processed/01_bound/`
 - Use the following format for the bound file name:
 
 `allrfmo_<temporal_resolution>_<spatial_resolution>_<gear_type>_<aggregation>.rds`
@@ -262,7 +262,7 @@ cells that are reported by both RFMOs.
   `distinct()`.
 - Export each overlap dataset as an `.rds` file to `data/processed/01_bound/`.
 - Save separate files for spatial and temporal resolutions, as well as aggregation if applicable.
-- Final final names should use the following format and be stored under `data/processed/01_bound/`:
+- Final names should use the following format and be stored under `data/processed/01_bound/`:
 
 `<temporal_resolution>_<aggregation>_overlap_cells_<gear_type>.rds`
 
@@ -327,7 +327,7 @@ The Makefile should rebuild the entire pipeline from raw → processed → outpu
 | longline    | 5°×5°   | year     | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline.rds`        |
 | longline    | 5°×5°   | year     | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline_flag.rds`   |
 
-## Cleaned catch and effort data sets by RFMO
+## Cleaned catch and effort datasets by RFMO
 
 ### IATTC
 ##### File path under: [data/processed/iattc](data/processed/iattc)
@@ -369,7 +369,7 @@ The Makefile should rebuild the entire pipeline from raw → processed → outpu
 | longline    | 5°×5°   | quarter  | yes     | `wcpfc_quarter_5deg_longline_flag.rds`   |
 | longline    | 5°×5°   | year     | yes     | `wcpfc_year_5deg_longline_flag.rds`      |
 
-## Raw catch and effort data sets by RFMO *(last updated January 2026)*
+## Raw catch and effort datasets by RFMO *(last updated January 2026)*
 
 ### IATTC
 ##### Source: https://www.iattc.org/en-us/Data/Public-domain
@@ -406,7 +406,7 @@ The Makefile should rebuild the entire pipeline from raw → processed → outpu
 ### WCPFC
 ##### Source: https://www.wcpfc.int/sustainability/scientific-data/wcpfc-public-domain-aggregated-catcheffort-data-download-page
 ##### File path under: [data/raw/wcpfc](data/raw/wcpfc)
-##### Length data under: [data/raw/wcpfc/length_data](data/raw/wcpfc/legnth_data)
+##### Length data under: [data/raw/wcpfc/length_data](data/raw/wcpfc/length_data)
 
 | Gear          | Spatial | Temporal | Organized by | Measurement type                      | Species  | Base path                      | Dataset                            | Metadata                  |
 |---------------|---------|----------|--------------|---------------------------------------|----------|--------------------------------|------------------------------------|---------------------------|
