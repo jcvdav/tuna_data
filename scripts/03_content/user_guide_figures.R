@@ -1,11 +1,10 @@
-
-
 # SET UP #######################################################################
 
 ## Load packages ---------------------------------------------------------------
 
 library(tidyverse)
 library(mapview)
+library(cowplot)
 
 ## Load data -------------------------------------------------------------------
 
@@ -30,6 +29,18 @@ datasets <- list(
   year_5deg_ll = year_5deg_ll,
   year_5deg_ll_flag = year_5deg_ll_flag
 )
+
+# Obtain coverage range for main table
+
+coverage <- map_dfr(datasets, ~{
+  data.frame(
+    start = min(.x$year, na.rm = TRUE),
+    end = max(.x$year, na.rm = TRUE),
+    n = nrow(.x)
+  )
+}, .id = "dataset")
+
+coverage
 
 # Annual observation counts by RFMO ############################################
 
@@ -68,7 +79,6 @@ plot_rfmo_counts <- function(data, title = "Observation Counts by RFMO") {
     )
 }
 
-
 # Generate plots for all datasets ---------------------------------------------
 
 plots <- lapply(names(datasets), function(x) {
@@ -103,3 +113,130 @@ for (name in names(plots)) {
     dpi = 300
   )
 }
+
+# Plot species data availability as bar charts -------------------------------
+
+plot_species_availability <- function(data,
+                                      title = "Data Availability by Species") {
+  # Id species catch columns
+  species_cols <- names(data)[grepl("^catch_", names(data))]
+
+  # Calculate data availability by species and year
+  availability <- data |>
+    select(year, all_of(species_cols)) |>
+    pivot_longer(
+      cols = all_of(species_cols),
+      names_to = "species",
+      values_to = "catch"
+    ) |>
+    # Clean species names
+    mutate(
+      species = gsub("catch_", "", species)
+    ) |>
+    filter(!is.na(catch) & catch > 0) |>
+    # Count number of available records for each species-year
+    group_by(year, species) |>
+    summarise(
+      n_records = n(),
+      .groups = "drop"
+    )
+
+  # Create individual bar plots for each species
+  species_plots <- availability |>
+    split(availability$species) |>
+    map(~{
+      ggplot(.x, aes(year, n_records)) +
+        geom_col(fill = "#0A9396") +
+        labs(
+          title = toupper(.x$species[1]),
+          x = NULL,
+          y = "Records"
+        ) +
+        theme_bw(base_size = 10) +
+        theme(
+          plot.title = element_text(size = 11),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid.minor = element_blank()
+        )
+    })
+  # Combine species plots into one figure
+  combined <- plot_grid(
+    plotlist = species_plots,
+    ncol = 2
+  )
+}
+
+# Generate plot for all datasets
+species_plots <- lapply(names(datasets), function(x) {
+
+  plot_species_availability(
+    datasets[[x]],
+    title = gsub("_", " ", x)
+  )
+
+})
+
+# Keep dataset names attached to plots
+names(species_plots) <- names(datasets)
+
+# View plots
+species_plots$month_1deg_ps
+species_plots$year_5deg_ll
+
+# Save plots
+for (name in names(species_plots)) {
+
+  ggsave(
+    filename = paste0(
+      "results/figures/species_availability/",
+      name,
+      "_species_availability.png"
+    ),
+    plot = species_plots[[name]],
+    width = 8,
+    height = 5,
+    dpi = 300
+  )
+}
+
+
+
+# Test plotting coverage mapview
+
+
+library(sf)
+library(mapview)
+library(tidyverse)
+
+# Add dataset names and combine
+spatial_coverage <- imap_dfr(datasets, function(x, name) {
+
+  x |>
+    select(lon, lat, year) |>
+    mutate(dataset = name)
+})
+
+# Summarise grid availability
+coverage_map <- spatial_coverage |>
+  group_by(lon, lat) |>
+  summarise(
+    n_datasets = n_distinct(dataset),
+    datasets = paste(unique(dataset), collapse = ", "),
+    start_year = min(year),
+    end_year = max(year),
+    .groups = "drop"
+  )
+
+coverage_sf <- st_as_sf(
+  coverage_map,
+  coords = c("lon", "lat"),
+  crs = 4326
+)
+
+mapview(
+  coverage_sf,
+  zcol = "n_datasets",
+  col.regions = viridisLite::viridis,
+  layer.name = "Number of datasets available",
+  popup = TRUE
+)
