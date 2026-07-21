@@ -1,0 +1,198 @@
+---
+title: "Documentation"
+format: html
+---
+
+
+# Tuna RFMO Data User Guide
+
+This document provides an overview for users utilizing the harmonized tuna RFMO datasets in this repository. It explains what data are available, how they are structured, and how to load data.
+
+## What these data are
+
+This repository harmonizes publicly available catch and effort datasets from three major tuna Regional Fisheries Management Organizations (RFMOs):
+
+- IATTC
+- ICCAT
+- WCPFC
+
+Each RFMO publishes data in different formats, resolutions, and naming conventions. This repository standardizes them into a unified format so users can work with a single, consistent set of catch and effort datasets.
+
+## Available dataset versions
+
+Files located under `data/output/`
+
+| Gear        | Spatial | Temporal | Temporal Coverage | By flag | RFMOs Included      | Dataset                             | Versions       |
+|-------------|---------|----------|-------------------|---------|---------------------|-------------------------------------|----------------|
+| purse seine | 1°×1°   | month    | 1958–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_1deg_purseseine`     | `.csv`, `.rds` |
+| purse seine | 1°×1°   | year     | 1958–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine`      | `.csv`, `.rds` |
+| purse seine | 1°×1°   | year     | 1958–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine_flag` | `.csv`, `.rds` |
+| longline    | 5°×5°   | month    | 1950–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline`       | `.csv`, `.rds` |
+| longline    | 5°×5°   | month    | 1950–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline_flag`  | `.csv`, `.rds` |
+| longline    | 5°×5°   | year     | 1951–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline`        | `.csv`, `.rds` |
+| longline    | 5°×5°   | year     | 1951–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline_flag`   | `.csv`, `.rds` |
+
+## Available variables
+
+| Variables        | Description                                       |
+|------------------|---------------------------------------------------|
+| `rfmo`           | Related RFMO                                      |
+| `flag`           | Flag code in ISO 3166-1 alpha-3 (excluding `SUN`) |
+| `lon`            | Longitude of fishing activity                     |
+| `lat`            | Latitude of the fishing activity                  |
+| `year`           | Year of record                                    |
+| `month`          | Month of record                                   |
+| `effort_set`     | Number of fishing sets                            |
+| `effort_day`     | Number of fishing days                            |
+| `effort_t_hooks` | Thousands of hooks                                |
+| `catch_tot`      | Total catch (mt)                                  |
+| `catch_skj`      | Catch of skipjack tuna (mt)                       |
+| `catch_alb`      | Catch of albacore tuna (mt)                       |
+| `catch_bet`      | Catch of bigeye tuna (mt)                         |
+| `catch_yft`      | Catch of yellowfin tuna (mt)                      |
+
+
+## Spatial Coverage
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+ 
+library(sf)
+library(mapview)
+library(tidyverse)
+
+## Load data -------------------------------------------------------------------
+
+month_1deg_ps <- readRDS("../data/output/allrfmo_month_1deg_purseseine.rds")
+month_5deg_ll_flag <- readRDS("../data/output/allrfmo_month_5deg_longline_flag.rds")
+month_5deg_ll <- readRDS("../data/output/allrfmo_month_5deg_longline.rds")
+year_1deg_ps_flag <- readRDS("../data/output/allrfmo_year_1deg_purseseine_flag.rds")
+year_1deg_ps <- readRDS("../data/output/allrfmo_year_1deg_purseseine.rds")
+year_5deg_ll <- readRDS("../data/output/allrfmo_year_5deg_longline.rds")
+year_5deg_ll_flag <- readRDS("../data/output/allrfmo_year_5deg_longline_flag.rds")
+
+# Put datasets into a list ----------------------------------------------------
+
+datasets <- list(
+  month_1deg_ps = month_1deg_ps,
+  month_5deg_ll_flag = month_5deg_ll_flag,
+  month_5deg_ll = month_5deg_ll,
+  year_1deg_ps_flag = year_1deg_ps_flag,
+  year_1deg_ps = year_1deg_ps,
+  year_5deg_ll = year_5deg_ll,
+  year_5deg_ll_flag = year_5deg_ll_flag
+)
+
+
+# Add dataset names and combine
+spatial_coverage <- imap_dfr(datasets, function(x, name) {
+  
+  x |> 
+    select(lon, lat, year) |> 
+    mutate(dataset = name)
+})
+
+# Summarise grid availability
+coverage_map <- spatial_coverage |> 
+  group_by(lon, lat) |> 
+  summarise(
+    n_datasets = n_distinct(dataset),
+    datasets = paste(unique(dataset), collapse = ", "),
+    start_year = min(year),
+    end_year = max(year),
+    .groups = "drop"
+  )
+
+coverage_sf <- st_as_sf(
+  coverage_map,
+  coords = c("lon", "lat"),
+  crs = 4326
+)
+
+datasets <- mapview(
+  coverage_sf,
+  zcol = "n_datasets",
+  col.regions = viridisLite::viridis,
+  layer.name = "Number of datasets available",
+  popup = TRUE
+)
+
+datasets
+```
+
+
+## Downloading `.rds` data in R
+
+The harmonized tuna RFMO datasets can be loaded directly into R from this GitHub repository without cloning the repository. The datasets for R are stored as `.rds` files in the `data/output/` directory.
+
+To download a dataset:
+
+1. Navigate to `data/output/` in the GitHub repository.
+2. Select the dataset you want to use.
+3. Copy the **Raw** file URL (not the regular GitHub webpage URL).
+4. Pass the URL to `readRDS()` as shown below.
+
+For example:
+
+```{r}
+raw_url <- "https://raw.githubusercontent.com/jcvdav/tuna_data/main/data/output/allrfmo_month_1deg_purseseine.rds"
+
+tuna_data <- readRDS(url(raw_url))
+
+head(tuna_data)
+```
+
+### Downloading `.csv` Data 
+
+`.rds` files are recommended for R users, but `.csv` files are also available for Excel users. 
+
+To download a `.csv` dataset to your computer:
+
+1. Navigate to the `data/output/` directory in the GitHub repository.
+2. Select the `.csv` file you would like to download.
+3. Click the **Download raw file** button.
+4. Save the file to your desired location on your computer.
+
+
+
+## Dataset coverage and overviews
+
+Descriptive temporal and spatial coverage
+
+## Dataset Overviews
+
+### Month, 1 x 1 degree, purse seine catch and effort
+
+![RFMO observation counts](../results/figures/rfmo_observations/month_1deg_ps_rfmo_counts.png){fig-alt="Annual observation counts by RFMO"}
+![Species availability counts](../results/figures/species_availability/month_1deg_ps_species_availability.png){fig-alt="Annual species availability"}
+
+#### Spatial Coverage
+
+
+### Year, 1 degree, purse seine catch and effort
+
+![RFMO observation counts](../results/figures/rfmo_observations/year_1deg_ps_rfmo_counts.png){fig-alt="Annual observation counts by RFMO"}
+
+### Year, 1 x 1 degree, purse seine catch and effort with flag data
+
+### Month, 5 x 5 degree, longline catch and effort
+
+### Month 5 x 5 degree, longline catch and effort with flag data
+
+### Year, 5 x 5 degree, longline catch and effort
+
+### Year, 5 x 5 degree, longline catch and effort with flag data
+
+# Citing this data
+
+# User feedback
+
+If you identify a bug, data issue, inconsistency, typo, or other problem, please open a GitHub issue and include as much detail as possible:
+
+- **Location of the issue:** Specify the relevant file, dataset, or script.
+- **Description of the problem:** Explain what problem you observed.
+- **Reason for concern:** Describe why you believe this may be an issue (e.g., incorrect values, missing information, unclear documentation, incorrect filtering).
+
+
