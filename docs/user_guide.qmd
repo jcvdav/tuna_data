@@ -94,7 +94,7 @@ spatial_coverage <- imap_dfr(datasets, function(x, name) {
     mutate(dataset = name)
 })
 
-# Summarise grid availability
+# Summarize grid availability
 coverage_map <- spatial_coverage |> 
   group_by(lon, lat) |> 
   summarise(
