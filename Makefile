@@ -405,3 +405,11 @@ $(OUT)allrfmo_year_5deg_longline_flag.rds: \
 
 $(OUT)%.csv: $(OUT)%.rds
 	Rscript -e "write.csv(readRDS('$<'), '$@', row.names = FALSE)"
+
+## DAG
+dag: dag.png
+
+# draw makefile dag
+dag.png: Makefile
+	LANG=C make -np | python3 make_p_to_json.py | python3 json_to_dot.py | dot -Tpng >| dag.png
+
