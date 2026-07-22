@@ -1,5 +1,13 @@
 # RFMO Tuna Catch and Effort Data
 
+## How to cite:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21494710.svg)](https://doi.org/10.5281/zenodo.21494710)
+
+Emily Rodriguez & Juan Carlos Villaseñor-Derbez. (2026). RFMO Tuna Catch and Effort Data (Version v0.0.0) [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.21494710
+
+
+
 ## Overview
 This project develops a standardized pipeline to compile, clean, and 
 restructure tuna catch and effort datasets from multiple Regional Fisheries
