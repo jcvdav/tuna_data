@@ -317,6 +317,26 @@ Records are retained according to the following hierarchy:
 
 `allrfmo_<temporal_resolution>_<spatial_resolution>_<gear_type>_<aggregation>.rds`
 
+# Cleaning length data
+
+Length data is currently available from the WCPFC and is included as a supplementary dataset, 
+processed separately from catch and effort data.
+
+The raw data is stored under `data/raw/wcpfc/length_data/`.
+
+The script to clean this data is stored under `scripts/standardizing/wcpfc_clean/`.
+This cleaning script should be named `clean_wcpfc_length_data.R`.
+
+## Cleaning steps:
+- Retain only tuna species used in catch and effort data.
+- Retain and center the 5°×5°cells.
+- Exclude 5 cm length bins, retaining only 1 cm and 2 cm bins (`lstrat = 1` or `2`).
+- Retain only records using the length code `UF`.
+- Rename variables to the project's standardized names.
+- Expand frequency observations so each row now represents a single fish measurement.
+
+Export the cleaned dataset as `data/output/wcpfc_length_data.rds`.
+
 ## Makefile
 
 The Makefile should rebuild the entire pipeline from raw → processed → output
