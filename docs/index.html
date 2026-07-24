@@ -101,6 +101,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="how-to-cite" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-cite">How to cite:</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://doi.org/10.5281/zenodo.21494710"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21494710.svg" class="img-fluid figure-img"></a></p>
+<figcaption>DOI</figcaption>
+</figure>
+</div>
+<p>Emily Rodriguez &amp; Juan Carlos Villaseñor-Derbez. (2026). RFMO Tuna Catch and Effort Data (Version v0.0.0) [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.21494710</p>
+</section>
 <section id="tuna-rfmo-data-user-guide" class="level1">
 <h1>Tuna RFMO Data User Guide</h1>
 <p>This document provides an overview for users utilizing the harmonized tuna RFMO datasets in this repository. It explains what data are available, how they are structured, and how to load data.</p>
@@ -114,98 +124,116 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Each RFMO publishes data in different formats, resolutions, and naming conventions. This repository standardizes them into a unified format so users can work with a single, consistent set of catch and effort datasets.</p>
 </section>
-<section id="available-dataset-versions" class="level2">
-<h2 class="anchored" data-anchor-id="available-dataset-versions">Available dataset versions</h2>
+<section id="available-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="available-datasets">Available datasets</h2>
 <p>Files located under <code>data/output/</code></p>
 <table class="caption-top table">
 <colgroup>
+<col style="width: 21%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
 <col style="width: 9%">
-<col style="width: 6%">
-<col style="width: 7%">
-<col style="width: 14%">
-<col style="width: 6%">
-<col style="width: 15%">
-<col style="width: 27%">
-<col style="width: 11%">
+<col style="width: 9%">
+<col style="width: 4%">
+<col style="width: 10%">
+<col style="width: 19%">
+<col style="width: 8%">
 </colgroup>
 <thead>
 <tr class="header">
+<th>Dataset</th>
 <th>Gear</th>
 <th>Spatial</th>
 <th>Temporal</th>
 <th>Temporal Coverage</th>
-<th>By flag</th>
+<th>Total Catch (mt)</th>
+<th>By Flag</th>
 <th>RFMOs Included</th>
 <th>Dataset</th>
-<th>Versions</th>
+<th>Formats</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
+<td><code>allrfmo_month_1deg_purseseine.rds</code></td>
 <td>purse seine</td>
 <td>1°×1°</td>
 <td>month</td>
-<td>1958–2024</td>
+<td>1958-2024</td>
+<td>64,848,155</td>
 <td>no</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_month_1deg_purseseine</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="even">
+<td><code>allrfmo_year_1deg_purseseine.rds</code></td>
 <td>purse seine</td>
 <td>1°×1°</td>
 <td>year</td>
-<td>1958–2024</td>
+<td>1958-2024</td>
+<td>67,807,604</td>
 <td>no</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_year_1deg_purseseine</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="odd">
+<td><code>allrfmo_year_1deg_purseseine_flag.rds</code></td>
 <td>purse seine</td>
 <td>1°×1°</td>
 <td>year</td>
-<td>1958–2024</td>
+<td>1958-2024</td>
+<td>54,633,092</td>
 <td>yes</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_year_1deg_purseseine_flag</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="even">
+<td><code>allrfmo_month_5deg_longline.rds</code></td>
 <td>longline</td>
 <td>5°×5°</td>
 <td>month</td>
-<td>1950–2024</td>
+<td>1950-2024</td>
+<td>14,527,054</td>
 <td>no</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_month_5deg_longline</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="odd">
+<td><code>allrfmo_month_5deg_longline_flag.rds</code></td>
 <td>longline</td>
 <td>5°×5°</td>
 <td>month</td>
-<td>1950–2024</td>
+<td>1950-2024</td>
+<td>13,113,173</td>
 <td>yes</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_month_5deg_longline_flag</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="even">
+<td><code>allrfmo_year_5deg_longline.rds</code></td>
 <td>longline</td>
 <td>5°×5°</td>
 <td>year</td>
-<td>1951–2024</td>
+<td>1951-2024</td>
+<td>10,944,941</td>
 <td>no</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_year_5deg_longline</code></td>
 <td><code>.csv</code>, <code>.rds</code></td>
 </tr>
 <tr class="odd">
+<td><code>allrfmo_year_5deg_longline_flag.rds</code></td>
 <td>longline</td>
 <td>5°×5°</td>
 <td>year</td>
-<td>1951–2024</td>
+<td>1951-2024</td>
+<td>11,134,893</td>
 <td>yes</td>
 <td>IATTC, ICCAT, WCPFC</td>
 <td><code>allrfmo_year_5deg_longline_flag</code></td>
@@ -213,10 +241,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-</section>
-<section id="available-variables" class="level2">
-<h2 class="anchored" data-anchor-id="available-variables">Available variables</h2>
+<section id="additonal-length-data" class="level3">
+<h3 class="anchored" data-anchor-id="additonal-length-data">Additonal length data</h3>
+<p>Files located under <code>data/output/</code></p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 17%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Gear</th>
+<th>Spatial</th>
+<th>Temporal</th>
+<th>Temporal Coverage</th>
+<th>By Flag</th>
+<th>RMFOs Included</th>
+<th>Formats</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>wcpfc_length_data</code></td>
+<td>multi</td>
+<td>5°×5°</td>
+<td>multi</td>
+<td>1953-2025</td>
+<td>no</td>
+<td>WCPFC</td>
+<td><code>.csv</code>, <code>.rds</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="available-variables-for-catch-and-effort-data" class="level2">
+<h2 class="anchored" data-anchor-id="available-variables-for-catch-and-effort-data">Available variables for catch and effort data</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 22%">
+<col style="width: 77%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Variables</th>
@@ -265,6 +337,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Total catch (mt)</td>
 </tr>
 <tr class="odd">
+<td><code>catch_tot_mt</code></td>
+<td>Total catch (mt) (for longline datasets)</td>
+</tr>
+<tr class="even">
+<td><code>catch_tot_num</code></td>
+<td>Total catch (numbers of tuna caught) (for longline datasets)</td>
+</tr>
+<tr class="odd">
 <td><code>catch_skj</code></td>
 <td>Catch of skipjack tuna (mt)</td>
 </tr>
@@ -283,8 +363,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-<section id="spatial-coverage" class="level2">
-<h2 class="anchored" data-anchor-id="spatial-coverage">Spatial Coverage</h2>
+<section id="additional-variables-specific-to-length-datasets" class="level2">
+<h2 class="anchored" data-anchor-id="additional-variables-specific-to-length-datasets">Additional variables specific to length datasets</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 81%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variables</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tstrat</code></td>
+<td>Temporal stratification</td>
+</tr>
+<tr class="even">
+<td><code>gear</code></td>
+<td>Gear type</td>
+</tr>
+<tr class="odd">
+<td><code>species</code></td>
+<td>Tuna species</td>
+</tr>
+<tr class="even">
+<td><code>length_cm</code></td>
+<td>Fish length in centimeters</td>
+</tr>
+<tr class="odd">
+<td><code>length_bin</code></td>
+<td>Length class/bin in cm based on interval (e.g., 1,2 cm bins)</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="downloading-.rds-data-in-r" class="level2">
 <h2 class="anchored" data-anchor-id="downloading-.rds-data-in-r">Downloading <code>.rds</code> data in R</h2>
@@ -341,8 +455,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="month-1-x-1-degree-purse-seine-catch-and-effort" class="level3">
 <h3 class="anchored" data-anchor-id="month-1-x-1-degree-purse-seine-catch-and-effort">Month, 1 x 1 degree, purse seine catch and effort</h3>
 <p><img src="../results/figures/rfmo_observations/month_1deg_ps_rfmo_counts.png" class="img-fluid" alt="Annual observation counts by RFMO"> <img src="../results/figures/species_availability/month_1deg_ps_species_availability.png" class="img-fluid" alt="Annual species availability"></p>
-<section id="spatial-coverage-1" class="level4">
-<h4 class="anchored" data-anchor-id="spatial-coverage-1">Spatial Coverage</h4>
+<section id="spatial-coverage" class="level4">
+<h4 class="anchored" data-anchor-id="spatial-coverage">Spatial Coverage</h4>
 </section>
 </section>
 <section id="year-1-degree-purse-seine-catch-and-effort" class="level3">
@@ -370,9 +484,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="year-5-x-5-degree-longline-catch-and-effort-with-flag-data">Year, 5 x 5 degree, longline catch and effort with flag data</h3>
 </section>
 </section>
-</section>
-<section id="citing-this-data" class="level1">
-<h1>Citing this data</h1>
 </section>
 <section id="user-feedback" class="level1">
 <h1>User feedback</h1>

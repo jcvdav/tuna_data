@@ -2,7 +2,11 @@
 title: "Documentation"
 format: html
 ---
+## How to cite:
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21494710.svg)](https://doi.org/10.5281/zenodo.21494710)
+
+Emily Rodriguez & Juan Carlos Villaseñor-Derbez. (2026). RFMO Tuna Catch and Effort Data (Version v0.0.0) [Dataset]. Zenodo. https://doi.org/10.5281/zenodo.21494710
 
 # Tuna RFMO Data User Guide
 
@@ -18,109 +22,59 @@ This repository harmonizes publicly available catch and effort datasets from thr
 
 Each RFMO publishes data in different formats, resolutions, and naming conventions. This repository standardizes them into a unified format so users can work with a single, consistent set of catch and effort datasets.
 
-## Available dataset versions
+## Available datasets
 
 Files located under `data/output/`
 
-| Gear        | Spatial | Temporal | Temporal Coverage | By flag | RFMOs Included      | Dataset                             | Versions       |
-|-------------|---------|----------|-------------------|---------|---------------------|-------------------------------------|----------------|
-| purse seine | 1°×1°   | month    | 1958–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_1deg_purseseine`     | `.csv`, `.rds` |
-| purse seine | 1°×1°   | year     | 1958–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine`      | `.csv`, `.rds` |
-| purse seine | 1°×1°   | year     | 1958–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine_flag` | `.csv`, `.rds` |
-| longline    | 5°×5°   | month    | 1950–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline`       | `.csv`, `.rds` |
-| longline    | 5°×5°   | month    | 1950–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline_flag`  | `.csv`, `.rds` |
-| longline    | 5°×5°   | year     | 1951–2024         | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline`        | `.csv`, `.rds` |
-| longline    | 5°×5°   | year     | 1951–2024         | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline_flag`   | `.csv`, `.rds` |
-
-## Available variables
-
-| Variables        | Description                                       |
-|------------------|---------------------------------------------------|
-| `rfmo`           | Related RFMO                                      |
-| `flag`           | Flag code in ISO 3166-1 alpha-3 (excluding `SUN`) |
-| `lon`            | Longitude of fishing activity                     |
-| `lat`            | Latitude of the fishing activity                  |
-| `year`           | Year of record                                    |
-| `month`          | Month of record                                   |
-| `effort_set`     | Number of fishing sets                            |
-| `effort_day`     | Number of fishing days                            |
-| `effort_t_hooks` | Thousands of hooks                                |
-| `catch_tot`      | Total catch (mt)                                  |
-| `catch_skj`      | Catch of skipjack tuna (mt)                       |
-| `catch_alb`      | Catch of albacore tuna (mt)                       |
-| `catch_bet`      | Catch of bigeye tuna (mt)                         |
-| `catch_yft`      | Catch of yellowfin tuna (mt)                      |
+| Dataset                                 | Gear        | Spatial | Temporal | Temporal Coverage | Total Catch (mt) | By Flag | RFMOs Included      | Dataset                             | Formats        |
+|-----------------------------------------|-------------|---------|----------|-------------------|------------------|---------|---------------------|-------------------------------------|----------------|
+| `allrfmo_month_1deg_purseseine.rds`     | purse seine | 1°×1°   | month    | 1958-2024         | 64,848,155       | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_1deg_purseseine`     | `.csv`, `.rds` |
+| `allrfmo_year_1deg_purseseine.rds`      | purse seine | 1°×1°   | year     | 1958-2024         | 67,807,604       | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine`      | `.csv`, `.rds` |
+| `allrfmo_year_1deg_purseseine_flag.rds` | purse seine | 1°×1°   | year     | 1958-2024         | 54,633,092       | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_1deg_purseseine_flag` | `.csv`, `.rds` |
+| `allrfmo_month_5deg_longline.rds`       | longline    | 5°×5°   | month    | 1950-2024         | 14,527,054       | no      | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline`       | `.csv`, `.rds` |
+| `allrfmo_month_5deg_longline_flag.rds`  | longline    | 5°×5°   | month    | 1950-2024         | 13,113,173       | yes     | IATTC, ICCAT, WCPFC | `allrfmo_month_5deg_longline_flag`  | `.csv`, `.rds` |
+| `allrfmo_year_5deg_longline.rds`        | longline    | 5°×5°   | year     | 1951-2024         | 10,944,941       | no      | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline`        | `.csv`, `.rds` |
+| `allrfmo_year_5deg_longline_flag.rds`   | longline    | 5°×5°   | year     | 1951-2024         | 11,134,893       | yes     | IATTC, ICCAT, WCPFC | `allrfmo_year_5deg_longline_flag`   | `.csv`, `.rds` |
 
 
-## Spatial Coverage
+### Additonal length data
 
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
+Files located under `data/output/`
 
-library(sf)
-library(mapview)
-library(tidyverse)
+| Dataset             | Gear  | Spatial | Temporal | Temporal Coverage | By Flag | RMFOs Included | Formats        |
+|---------------------|-------|---------|----------|-------------------|---------|----------------|----------------|
+| `wcpfc_length_data` | multi | 5°×5°   | multi    | 1953-2025         | no      | WCPFC          | `.csv`, `.rds` |
 
-## Load data -------------------------------------------------------------------
+## Available variables for catch and effort data
 
-month_1deg_ps <- readRDS("../data/output/allrfmo_month_1deg_purseseine.rds")
-month_5deg_ll_flag <- readRDS("../data/output/allrfmo_month_5deg_longline_flag.rds")
-month_5deg_ll <- readRDS("../data/output/allrfmo_month_5deg_longline.rds")
-year_1deg_ps_flag <- readRDS("../data/output/allrfmo_year_1deg_purseseine_flag.rds")
-year_1deg_ps <- readRDS("../data/output/allrfmo_year_1deg_purseseine.rds")
-year_5deg_ll <- readRDS("../data/output/allrfmo_year_5deg_longline.rds")
-year_5deg_ll_flag <- readRDS("../data/output/allrfmo_year_5deg_longline_flag.rds")
+| Variables        | Description                                                  |
+|------------------|--------------------------------------------------------------|
+| `rfmo`           | Related RFMO                                                 |
+| `flag`           | Flag code in ISO 3166-1 alpha-3 (excluding `SUN`)            |
+| `lon`            | Longitude of fishing activity                                |
+| `lat`            | Latitude of the fishing activity                             |
+| `year`           | Year of record                                               |
+| `month`          | Month of record                                              |
+| `effort_set`     | Number of fishing sets                                       |
+| `effort_day`     | Number of fishing days                                       |
+| `effort_t_hooks` | Thousands of hooks                                           |
+| `catch_tot`      | Total catch (mt)                                             |
+| `catch_tot_mt`   | Total catch (mt) (for longline datasets)                     |
+| `catch_tot_num`  | Total catch (numbers of tuna caught) (for longline datasets) |
+| `catch_skj`      | Catch of skipjack tuna (mt)                                  |
+| `catch_alb`      | Catch of albacore tuna (mt)                                  |
+| `catch_bet`      | Catch of bigeye tuna (mt)                                    |
+| `catch_yft`      | Catch of yellowfin tuna (mt)                                 |
 
-# Put datasets into a list ----------------------------------------------------
+## Additional variables specific to length datasets
 
-datasets <- list(
-  month_1deg_ps = month_1deg_ps,
-  month_5deg_ll_flag = month_5deg_ll_flag,
-  month_5deg_ll = month_5deg_ll,
-  year_1deg_ps_flag = year_1deg_ps_flag,
-  year_1deg_ps = year_1deg_ps,
-  year_5deg_ll = year_5deg_ll,
-  year_5deg_ll_flag = year_5deg_ll_flag
-)
-
-
-# Add dataset names and combine
-spatial_coverage <- imap_dfr(datasets, function(x, name) {
-
-  x |>
-    select(lon, lat, year) |>
-    mutate(dataset = name)
-})
-
-# Summarize grid availability
-coverage_map <- spatial_coverage |>
-  group_by(lon, lat) |>
-  summarise(
-    n_datasets = n_distinct(dataset),
-    datasets = paste(unique(dataset), collapse = ", "),
-    start_year = min(year),
-    end_year = max(year),
-    .groups = "drop"
-  )
-
-coverage_sf <- st_as_sf(
-  coverage_map,
-  coords = c("lon", "lat"),
-  crs = 4326
-)
-
-datasets <- mapview(
-  coverage_sf,
-  zcol = "n_datasets",
-  col.regions = viridisLite::viridis,
-  layer.name = "Number of datasets available",
-  popup = TRUE
-)
-
-datasets
-```
+| Variables    | Description                                                  |
+|--------------|--------------------------------------------------------------|
+| `tstrat`     | Temporal stratification                                      |
+| `gear`       | Gear type                                                    |
+| `species`    | Tuna species                                                 |
+| `length_cm`  | Fish length in centimeters                                   |
+| `length_bin` | Length class/bin in cm based on interval (e.g., 1,2 cm bins) |
 
 ## Downloading `.rds` data in R
 
@@ -183,8 +137,6 @@ Descriptive temporal and spatial coverage
 ### Year, 5 x 5 degree, longline catch and effort
 
 ### Year, 5 x 5 degree, longline catch and effort with flag data
-
-# Citing this data
 
 # User feedback
 
