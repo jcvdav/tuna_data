@@ -2,6 +2,42 @@
 title: "Documentation"
 format: html
 ---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+## Load packages ---------------------------------------------------------------
+
+library(tidyverse)
+library(mapview)
+library(cowplot)
+library(sf)
+
+## Load data -------------------------------------------------------------------
+
+month_1deg_ps <- readRDS("../data/output/allrfmo_month_1deg_purseseine.rds")
+month_5deg_ll_flag <- readRDS("../data/output/allrfmo_month_5deg_longline_flag.rds")
+month_5deg_ll <- readRDS("../data/output/allrfmo_month_5deg_longline.rds")
+year_1deg_ps_flag <- readRDS("../data/output/allrfmo_year_1deg_purseseine_flag.rds")
+year_1deg_ps <- readRDS("../data/output/allrfmo_year_1deg_purseseine.rds")
+year_5deg_ll <- readRDS("../data/output/allrfmo_year_5deg_longline.rds")
+year_5deg_ll_flag <- readRDS("../data/output/allrfmo_year_5deg_longline_flag.rds")
+
+# Put datasets into a list ----------------------------------------------------
+
+datasets <- list(
+  month_1deg_ps = month_1deg_ps,
+  month_5deg_ll_flag = month_5deg_ll_flag,
+  month_5deg_ll = month_5deg_ll,
+  year_1deg_ps_flag = year_1deg_ps_flag,
+  year_1deg_ps = year_1deg_ps,
+  year_5deg_ll = year_5deg_ll,
+  year_5deg_ll_flag = year_5deg_ll_flag
+)
+```
+
+
 ## How to cite:
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21494710.svg)](https://doi.org/10.5281/zenodo.21494710)
@@ -76,6 +112,50 @@ Files located under `data/output/`
 | `length_cm`  | Fish length in centimeters                                   |
 | `length_bin` | Length class/bin in cm based on interval (e.g., 1,2 cm bins) |
 
+## Spatial coverage
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+# Add dataset names and combine
+spatial_coverage <- imap_dfr(datasets, function(x, name) {
+
+  x |>
+    select(lon, lat, year) |>
+    mutate(dataset = name)
+})
+
+# Summarize grid availability
+coverage_map <- spatial_coverage |>
+  group_by(lon, lat) |>
+  summarise(
+    n_datasets = n_distinct(dataset),
+    datasets = paste(unique(dataset), collapse = ", "),
+    start_year = min(year),
+    end_year = max(year),
+    .groups = "drop"
+  )
+
+coverage_sf <- st_as_sf(
+  coverage_map,
+  coords = c("lon", "lat"),
+  crs = 4326
+)
+
+datasets <- mapview(
+  coverage_sf,
+  zcol = "n_datasets",
+  col.regions = viridisLite::viridis,
+  layer.name = "Number of datasets available",
+  popup = FALSE
+)
+
+datasets
+```
+
+
 ## Downloading `.rds` data in R
 
 The harmonized tuna RFMO datasets can be loaded directly into R from this GitHub repository without cloning the repository. The datasets for R are stored as `.rds` files in the `data/output/` directory.
@@ -87,7 +167,7 @@ To download a dataset:
 3. Copy the **Raw** file URL (not the regular GitHub webpage URL).
 4. Pass the URL to `readRDS()` as shown below.
 
-For example:
+**For example:**
 
 ```{r}
 raw_url <- "https://raw.githubusercontent.com/jcvdav/tuna_data/main/data/output/allrfmo_month_1deg_purseseine.rds"
@@ -109,26 +189,293 @@ To download a `.csv` dataset to your computer:
 4. Save the file to your desired location on your computer.
 
 
+## Dataset overviews
 
-## Dataset coverage and overviews
+### Purse seine datasets
 
-Descriptive temporal and spatial coverage
+```{r}
+#| code-fold: true
+#| code-summary: "Show code for creating catch time series"
+#| echo: true
+#| warning: false
+#| message: false
+
+### Creating a purse seine catch time series ###################################
+
+# Combine purse seine datasets into a single table
+ps_ts <- bind_rows(
+  
+  # Aggregate each dataset's catch into annual catch totals
+  
+  # Monthly purse seine data
+  month_1deg_ps |>
+    
+    # Organize observations into groups by year
+    group_by(year) |>
+    
+    # Calculate the total catch each year
+    summarise(catch = sum(catch_tot, na.rm = TRUE)) |>
+    
+    # Create a new column called "dataset" that identifies which source dataset produced each time series
+    mutate(dataset = "Monthly"),
+  
+  # Yearly purse seine data
+  year_1deg_ps |>
+    group_by(year) |>
+    summarise(catch = sum(catch_tot, na.rm = TRUE)) |>
+    mutate(dataset = "Yearly"),
+
+  # Yearly purse seine data, by flag
+  year_1deg_ps_flag |>
+    group_by(year) |>
+    summarise(catch = sum(catch_tot, na.rm = TRUE)) |>
+    mutate(dataset = "Yearly (flag)")
+)
+
+#### Plot the summarized data ##################################################
+
+ggplot(ps_ts, aes(year, catch, color = dataset)) +
+  
+  # geom_line() adds a line connecting observations through time
+  geom_line(linewidth = 1) +
+  scale_color_manual(
+    values = c(
+      "Monthly" = "#005F73",
+      "Yearly" = "#0A9396",
+      "Yearly (flag)" = "#94D2BD"
+    )) +
+  theme_bw() +
+  labs(
+    title = "Purse seine datasets",
+    x = "Year",
+    y = "Total catch (mt)",
+    color = NULL
+  )
+```
+### Longline datasets
+```{r}
+#| code-fold: true
+#| code-summary: "Show code for creating catch time series"
+#| echo: true
+#| warning: false
+#| message: false
+
+### Creating a longline catch time series ######################################
+
+# Combine longline datasets into a single table
+ll_ts <- bind_rows(
+  
+  # Aggregate each dataset's catch into annual catch totals
+  
+  # Monthly longline data
+  month_5deg_ll |>
+    
+    # Organize observations into groups by year
+    group_by(year) |>
+    
+    # Calculate the total catch each year
+    summarise(catch = sum(catch_tot_mt, na.rm = TRUE)) |>
+    
+    # Create a new column called "dataset" that identifies which source dataset produced each time series
+    mutate(dataset = "Monthly"),
+  
+  # Montly longline data where catch with flag data
+  month_5deg_ll_flag |>
+    group_by(year) |>
+    summarise(catch = sum(catch_tot_mt, na.rm = TRUE)) |>
+    mutate(dataset = "Monthly (flag)"),
+
+  # Annual longline dataset
+  year_5deg_ll |>
+    group_by(year) |>
+    summarise(catch = sum(catch_tot_mt, na.rm = TRUE)) |>
+    mutate(dataset = "Yearly"),
+  
+  # Annual longline dataset with flag data
+  year_5deg_ll_flag |>
+    group_by(year) |>
+    summarise(catch = sum(catch_tot_mt, na.rm = TRUE)) |>
+    mutate(dataset = "Yearly (flag)")
+)
+
+#### Plot the summarized data ##################################################
+
+ggplot(ll_ts, aes(year, catch, color = dataset)) +
+  
+  # geom_line() adds a line connecting observations through time
+  geom_line(linewidth = 1) +
+  scale_color_manual(
+    values = c(
+      "Monthly" = "#005F73",
+      "Monthly (flag)" = "#0A9396",
+      "Yearly" = "#94D2BD",
+      "Yearly (flag)" = "#EE9B00"
+    )
+  ) +
+
+  theme_bw() +
+  labs(
+    title = "Longline datasets",
+    x = "Year",
+    y = "Total catch (mt)",
+    color = NULL
+  )
+```
+
 
 ## Dataset Overviews
 
 ### Month, 1 x 1 degree, purse seine catch and effort
 
-![RFMO observation counts](../results/figures/rfmo_observations/month_1deg_ps_rfmo_counts.png){fig-alt="Annual observation counts by RFMO"}
-![Species availability counts](../results/figures/species_availability/month_1deg_ps_species_availability.png){fig-alt="Annual species availability"}
+```{r}
+#| echo: false
+#| code-summary: "Show code for creating catch time series"
+#| warning: false
+#| message: false
 
-#### Spatial Coverage
+ggplot(month_1deg_ps, aes(x = year, fill = rfmo)) +
+    geom_bar(color = "white", linewidth = 0.2) +
+
+    scale_fill_manual(
+      values = c(
+        "iccat" = "#005F73",
+        "iattc" = "#0A9396",
+        "wcpfc" = "#94D2BD"
+      ),
+      labels = c(
+        "iccat" = "ICCAT",
+        "iattc" = "IATTC",
+        "wcpfc" = "WCPFC"
+      )
+    ) +
+
+    labs(
+      title = "Observation Counts by RFMO",
+      x = "Year",
+      y = "Number of Observations (rows)",
+      fill = "RFMO"
+    ) +
+
+    theme_bw(base_size = 12) +
+    theme(
+      plot.title = element_text(size = 14),
+      legend.position = "right",
+      panel.grid.minor = element_blank()
+    )
+```
+```{r}
+#| code-fold: true
+#| code-summary: "Show code for creating species catch time series"
+#| echo: true
+#| warning: false
+#| message: false
+
+
+### Creating a purse seine species catch time series ############################
+
+# Select one dataset for analysis.
+# Here we use the monthly 1°x1° purse seine dataset.
+
+ps_species_ts <- month_1deg_ps |>
+
+  # Group observations by year so catches can be summarized annually
+  group_by(year) |>
+
+  # Calculate total annual catch for each species.
+  summarise(
+    skipjack = sum(catch_skj, na.rm = TRUE),
+    albacore = sum(catch_alb, na.rm = TRUE),
+    bigeye = sum(catch_bet, na.rm = TRUE),
+    yellowfin = sum(catch_yft, na.rm = TRUE)
+  ) |>
+
+  # Convert the dataset from wide format to long format.
+  pivot_longer(
+    cols = c(skipjack, albacore, bigeye, yellowfin),
+    names_to = "species",
+    values_to = "catch"
+  )
+
+### Plot annual catch trends by species ########################################
+
+ggplot(
+  ps_species_ts, aes(
+    x = year,
+    y = catch,
+    color = species
+  )) +
+
+  # geom_line() connects annual catch observations through time
+  geom_line(linewidth = 1) +
+
+  # Define colors for each species
+  scale_color_manual(
+    values = c(
+      "skipjack" = "#005F73",
+      "albacore" = "#0A9396",
+      "bigeye" = "#94D2BD",
+      "yellowfin" = "#EE9B00"
+    ),
+    labels = c(
+      "skipjack" = "Skipjack",
+      "albacore" = "Albacore",
+      "bigeye" = "Bigeye",
+      "yellowfin" = "Yellowfin"
+    )) +
+
+  theme_bw() +
+
+  labs(
+    title = "Purse seine catch by species",
+    x = "Year",
+    y = "Total catch (mt)",
+    color = NULL
+  )
+```
 
 
 ### Year, 1 degree, purse seine catch and effort
 
-![RFMO observation counts](../results/figures/rfmo_observations/year_1deg_ps_rfmo_counts.png){fig-alt="Annual observation counts by RFMO"}
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+ggplot(year_1deg_ps, aes(x = year, fill = rfmo)) +
+    geom_bar(color = "white", linewidth = 0.2) +
+
+    scale_fill_manual(
+      values = c(
+        "iccat" = "#005F73",
+        "iattc" = "#0A9396",
+        "wcpfc" = "#94D2BD"
+      ),
+      labels = c(
+        "iccat" = "ICCAT",
+        "iattc" = "IATTC",
+        "wcpfc" = "WCPFC"
+      )
+    ) +
+
+    labs(
+      title = "Observation Counts by RFMO",
+      x = "Year",
+      y = "Number of Observations (rows)",
+      fill = "RFMO"
+    ) +
+
+    theme_bw(base_size = 12) +
+    theme(
+      plot.title = element_text(size = 14),
+      legend.position = "right",
+      panel.grid.minor = element_blank()
+    )
+```
 
 ### Year, 1 x 1 degree, purse seine catch and effort with flag data
+
+
 
 ### Month, 5 x 5 degree, longline catch and effort
 
