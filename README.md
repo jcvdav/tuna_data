@@ -317,6 +317,12 @@ Records are retained according to the following hierarchy:
 
 `allrfmo_<temporal_resolution>_<spatial_resolution>_<gear_type>_<aggregation>.rds`
 
+## Additional data versions
+
+`.csv` files are also available for all harmonized datasets in `data/output/`. These
+.`csv` files are not created within the harmonizing R scripts. Instead, `.csv` files 
+are created in the `Makefile`. See Makefile section for instructions.
+
 # Cleaning length data
 
 Length data is currently available from the WCPFC and is included as a supplementary dataset, 
@@ -339,7 +345,14 @@ Export the cleaned dataset as `data/output/wcpfc_length_data.rds`.
 
 ## Makefile
 
-The Makefile should rebuild the entire pipeline from raw → processed → output
+The Makefile should rebuild the entire pipeline from raw → processed → output. Additionally,
+the Makefile creates `.csv` formats of all harmonized datasets using the following code:
+
+```text
+$(OUT)%.csv: $(OUT)%.rds
+	Rscript -e "write.csv(readRDS('$<'), '$@', row.names = FALSE)"
+```
+`.csv` formats of the harmonzied datasets are stored in `data/output/`.
 
 # Reference
 
