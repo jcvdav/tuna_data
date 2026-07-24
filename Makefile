@@ -43,7 +43,9 @@ all: \
 	$(OUT)allrfmo_month_5deg_longline.csv \
 	$(OUT)allrfmo_month_5deg_longline_flag.csv \
 	$(OUT)allrfmo_year_5deg_longline.csv \
-	$(OUT)allrfmo_year_5deg_longline_flag.csv
+	$(OUT)allrfmo_year_5deg_longline_flag.csv \
+	$(OUT)wcpfc_length_data.rds \
+	$(OUT)wcpfc_length_data.csv
 
 iattc: \
 	$(PROC_IATTC)iattc_month_1deg_purseseine.rds \
@@ -398,6 +400,10 @@ $(OUT)allrfmo_year_5deg_longline_flag.rds: \
 # WCPFC Length Data
 ###############################
 
+$(OUT)wcpfc_length_data.rds: \
+	$(ST_WCPFC)clean_wcpfc_length_data.R \
+	$(RAW_WCPFC)length_data/wcpfc_length_data.csv
+	Rscript $<
 
 ###############################
 # Export harmonized datasets to CSV
