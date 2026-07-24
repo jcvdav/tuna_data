@@ -15,7 +15,7 @@
 ## Load packages ---------------------------------------------------------------
 library(tidyverse)
 
-length_data <- read_csv("data/raw/wcpfc/length_data/LF_PUBLIC/LF_PUBLIC.csv")
+length_data <- read_csv("data/raw/wcpfc/length_data/wcpfc_length_data.csv")
 
 ## Build function to clean and center lat/lon variables ------------------------
 
