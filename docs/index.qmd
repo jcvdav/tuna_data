@@ -191,7 +191,7 @@ To download a `.csv` dataset to your computer:
 
 ## Dataset overviews
 
-### Purse seine datasets
+### Purse seine catch time series
 
 ```{r}
 #| code-fold: true
@@ -234,7 +234,10 @@ ps_ts <- bind_rows(
 
 #### Plot the summarized data ##################################################
 
-ggplot(ps_ts, aes(year, catch, color = dataset)) +
+ggplot(ps_ts,
+       aes(x = year, 
+           y = catch, 
+           color = dataset)) +
   
   # geom_line() adds a line connecting observations through time
   geom_line(linewidth = 1) +
@@ -246,13 +249,12 @@ ggplot(ps_ts, aes(year, catch, color = dataset)) +
     )) +
   theme_bw() +
   labs(
-    title = "Purse seine datasets",
     x = "Year",
     y = "Total catch (mt)",
     color = NULL
   )
 ```
-### Longline datasets
+### Longline catch time series
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code for creating catch time series"
@@ -300,7 +302,10 @@ ll_ts <- bind_rows(
 
 #### Plot the summarized data ##################################################
 
-ggplot(ll_ts, aes(year, catch, color = dataset)) +
+ggplot(ll_ts, 
+       aes(x = year, 
+           y = catch, 
+           color = dataset)) +
   
   # geom_line() adds a line connecting observations through time
   geom_line(linewidth = 1) +
@@ -315,7 +320,6 @@ ggplot(ll_ts, aes(year, catch, color = dataset)) +
 
   theme_bw() +
   labs(
-    title = "Longline datasets",
     x = "Year",
     y = "Total catch (mt)",
     color = NULL
@@ -329,12 +333,15 @@ ggplot(ll_ts, aes(year, catch, color = dataset)) +
 
 ```{r}
 #| echo: false
-#| code-summary: "Show code for creating catch time series"
 #| warning: false
 #| message: false
 
-ggplot(month_1deg_ps, aes(x = year, fill = rfmo)) +
-    geom_bar(color = "white", linewidth = 0.2) +
+ggplot(month_1deg_ps, 
+       aes(x = year, 
+           fill = rfmo)) +
+    geom_bar(
+      color = "white", 
+      linewidth = 0.2) +
 
     scale_fill_manual(
       values = c(
@@ -371,7 +378,7 @@ ggplot(month_1deg_ps, aes(x = year, fill = rfmo)) +
 #| message: false
 
 
-### Creating a purse seine species catch time series ############################
+### Creating a species catch time series #######################################
 
 # Select one dataset for analysis.
 # Here we use the monthly 1°x1° purse seine dataset.
@@ -399,10 +406,10 @@ ps_species_ts <- month_1deg_ps |>
 ### Plot annual catch trends by species ########################################
 
 ggplot(
-  ps_species_ts, aes(
-    x = year,
-    y = catch,
-    color = species
+  ps_species_ts, 
+  aes(x = year,
+      y = catch,
+      color = species
   )) +
 
   # geom_line() connects annual catch observations through time
