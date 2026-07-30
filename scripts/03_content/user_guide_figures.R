@@ -42,6 +42,21 @@ coverage <- map_dfr(datasets, ~{
 
 coverage
 
+
+# Sum catch total in mt for each dataset ---------------------------------------
+
+catch_totals <- map_dbl(datasets, ~{
+  if ("catch_tot" %in% names(.x)) {
+    sum(.x$catch_tot, na.rm = TRUE)
+  } else if ("catch_tot_mt" %in% names(.x)) {
+    sum(.x$catch_tot_mt, na.rm = TRUE)
+  } else {
+    NA_real_
+  }
+})
+
+catch_totals
+
 # Annual observation counts by RFMO ############################################
 
 # Create plotting function ----------------------------------------------------
@@ -78,74 +93,6 @@ plot_rfmo_counts <- function(data, title = "Observation Counts by RFMO") {
       panel.grid.minor = element_blank()
     )
 }
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-library(sf)
-library(mapview)
-library(tidyverse)
-
-## Load data -------------------------------------------------------------------
-
-month_1deg_ps <- readRDS("../data/output/allrfmo_month_1deg_purseseine.rds")
-month_5deg_ll_flag <- readRDS("../data/output/allrfmo_month_5deg_longline_flag.rds")
-month_5deg_ll <- readRDS("../data/output/allrfmo_month_5deg_longline.rds")
-year_1deg_ps_flag <- readRDS("../data/output/allrfmo_year_1deg_purseseine_flag.rds")
-year_1deg_ps <- readRDS("../data/output/allrfmo_year_1deg_purseseine.rds")
-year_5deg_ll <- readRDS("../data/output/allrfmo_year_5deg_longline.rds")
-year_5deg_ll_flag <- readRDS("../data/output/allrfmo_year_5deg_longline_flag.rds")
-
-# Put datasets into a list ----------------------------------------------------
-
-datasets <- list(
-  month_1deg_ps = month_1deg_ps,
-  month_5deg_ll_flag = month_5deg_ll_flag,
-  month_5deg_ll = month_5deg_ll,
-  year_1deg_ps_flag = year_1deg_ps_flag,
-  year_1deg_ps = year_1deg_ps,
-  year_5deg_ll = year_5deg_ll,
-  year_5deg_ll_flag = year_5deg_ll_flag
-)
-
-
-# Add dataset names and combine
-spatial_coverage <- imap_dfr(datasets, function(x, name) {
-
-  x |>
-    select(lon, lat, year) |>
-    mutate(dataset = name)
-})
-
-# Summarize grid availability
-coverage_map <- spatial_coverage |>
-  group_by(lon, lat) |>
-  summarise(
-    n_datasets = n_distinct(dataset),
-    datasets = paste(unique(dataset), collapse = ", "),
-    start_year = min(year),
-    end_year = max(year),
-    .groups = "drop"
-  )
-
-coverage_sf <- st_as_sf(
-  coverage_map,
-  coords = c("lon", "lat"),
-  crs = 4326
-)
-
-datasets <- mapview(
-  coverage_sf,
-  zcol = "n_datasets",
-  col.regions = viridisLite::viridis,
-  layer.name = "Number of datasets available",
-  popup = TRUE
-)
-
-datasets
-```
 
 
 # Generate plots for all datasets ---------------------------------------------
@@ -268,44 +215,3 @@ for (name in names(species_plots)) {
   )
 }
 
-
-
-# Test plotting coverage mapview
-
-
-library(sf)
-library(mapview)
-library(tidyverse)
-
-# Add dataset names and combine
-spatial_coverage <- imap_dfr(datasets, function(x, name) {
-
-  x |>
-    select(lon, lat, year) |>
-    mutate(dataset = name)
-})
-
-# Summarise grid availability
-coverage_map <- spatial_coverage |>
-  group_by(lon, lat) |>
-  summarise(
-    n_datasets = n_distinct(dataset),
-    datasets = paste(unique(dataset), collapse = ", "),
-    start_year = min(year),
-    end_year = max(year),
-    .groups = "drop"
-  )
-
-coverage_sf <- st_as_sf(
-  coverage_map,
-  coords = c("lon", "lat"),
-  crs = 4326
-)
-
-mapview(
-  coverage_sf,
-  zcol = "n_datasets",
-  col.regions = viridisLite::viridis,
-  layer.name = "Number of datasets available",
-  popup = TRUE
-)
