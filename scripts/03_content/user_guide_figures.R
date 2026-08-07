@@ -215,3 +215,64 @@ for (name in names(species_plots)) {
   )
 }
 
+
+# Extra figure for index -------------------------------------------------------
+
+# Select one dataset for analysis.
+# Here we use the monthly 1°x1° purse seine dataset.
+
+ps_species_ts <- month_1deg_ps |>
+
+  # Group observations by year so catches can be summarized annually
+  group_by(year) |>
+
+  # Calculate total annual catch for each species.
+  summarise(
+    skipjack = sum(catch_skj, na.rm = TRUE),
+    albacore = sum(catch_alb, na.rm = TRUE),
+    bigeye = sum(catch_bet, na.rm = TRUE),
+    yellowfin = sum(catch_yft, na.rm = TRUE)
+  ) |>
+
+  # Convert the dataset from wide format to long format.
+  pivot_longer(
+    cols = c(skipjack, albacore, bigeye, yellowfin),
+    names_to = "species",
+    values_to = "catch"
+  )
+
+### Plot annual catch trends by species ########################################
+
+ggplot(
+  ps_species_ts,
+  aes(x = year,
+      y = catch,
+      color = species
+  )) +
+
+  # geom_line() connects annual catch observations through time
+  geom_line(linewidth = 1) +
+
+  # Define colors for each species
+  scale_color_manual(
+    values = c(
+      "skipjack" = "#005F73",
+      "albacore" = "#0A9396",
+      "bigeye" = "#94D2BD",
+      "yellowfin" = "#EE9B00"
+    ),
+    labels = c(
+      "skipjack" = "Skipjack",
+      "albacore" = "Albacore",
+      "bigeye" = "Bigeye",
+      "yellowfin" = "Yellowfin"
+    )) +
+
+  theme_bw() +
+
+  labs(
+    title = "Purse seine catch by species",
+    x = "Year",
+    y = "Total catch (mt)",
+    color = NULL
+  )
