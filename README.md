@@ -345,6 +345,9 @@ Export the cleaned dataset as `data/output/wcpfc_length_data.rds`.
 
 ## Makefile
 
+![DAG generated from repository Makefile](dag.png)
+
+
 The Makefile should rebuild the entire pipeline from raw → processed → output. Additionally,
 the Makefile creates `.csv` formats of all harmonized datasets using the following code:
 
@@ -353,6 +356,18 @@ $(OUT)%.csv: $(OUT)%.rds
 	Rscript -e "write.csv(readRDS('$<'), '$@', row.names = FALSE)"
 ```
 `.csv` formats of the harmonzied datasets are stored in `data/output/`.
+
+### Stray blocks in the generated DAG
+
+The Makefile visual (`dag.png`) contains stray blocks corresponding to Makefile targets
+that are not expected to appear as standalone DAG nodes. These do not correspond
+to the overall project workflow. The solution to suppress these blocks
+has not been determined. Stray blocks include:
+
+- `all`
+- `wcpfc`
+- `iattc`
+- `iccat`
 
 # Reference
 
