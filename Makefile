@@ -44,8 +44,7 @@ all: \
 	$(OUT)allrfmo_month_5deg_longline_flag.csv \
 	$(OUT)allrfmo_year_5deg_longline.csv \
 	$(OUT)allrfmo_year_5deg_longline_flag.csv \
-	$(OUT)wcpfc_length_data.rds \
-	$(OUT)wcpfc_length_data.csv
+	$(OUT)wcpfc_length_data.rds
 
 iattc: \
 	$(PROC_IATTC)iattc_month_1deg_purseseine.rds \
