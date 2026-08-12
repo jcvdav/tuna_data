@@ -77,9 +77,9 @@ Files located under `data/output/`
 
 Files located under `data/output/`
 
-| Dataset             | Gear  | Spatial | Temporal | Temporal Coverage | By Flag | RMFOs Included | Formats        |
-|---------------------|-------|---------|----------|-------------------|---------|----------------|----------------|
-| `wcpfc_length_data` | multi | 5°×5°   | multi    | 1953-2025         | no      | WCPFC          | `.csv`, `.rds` |
+| Dataset             | Gear  | Spatial | Temporal | Temporal Coverage | By Flag | RMFOs Included | Formats |
+|---------------------|-------|---------|----------|-------------------|---------|----------------|---------|
+| `wcpfc_length_data` | multi | 5°×5°   | multi    | 1953-2025         | no      | WCPFC          | `.rds`  |
 
 ## Available variables for catch and effort data
 
