@@ -355,7 +355,8 @@ the Makefile creates `.csv` formats of all harmonized datasets using the followi
 $(OUT)%.csv: $(OUT)%.rds
 	Rscript -e "write.csv(readRDS('$<'), '$@', row.names = FALSE)"
 ```
-`.csv` formats of the harmonzied datasets are stored in `data/output/`.
+`.csv` formats of the harmonized datasets are stored in `data/output/`. There is no
+`.csv` file creation for the WCPFC length dataset.
 
 ### Stray blocks in the generated DAG
 
