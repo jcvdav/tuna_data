@@ -77,7 +77,7 @@ wcpfc: \
 # IATTC data preparation
 ###############################
 
-$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.csv: \
+$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_merged.rds: \
 	$(ST_IATTC)merge_longline_data.R \
 	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_mt.csv \
 	$(RAW_IATTC)month_5deg_longline_flag/month_5deg_longline_flag_num.csv
