@@ -1,5 +1,5 @@
 ################################################################################
-# Harmonize purse seine monthly, 1x1 degree data
+# Harmonize longline yearly, 5x5 degree data
 ################################################################################
 #
 # Emily Rodriguez
@@ -11,7 +11,7 @@
 # the same the data from WCPFC was kept. Some overlaps may still exist between
 # IATTC and ICCAT.
 #
-# The output is the final monthly harmonized monthly, 5x5 degree dataset.
+# The output is the final harmonized yearly, 5x5 degree dataset.
 #
 ################################################################################
 
@@ -19,16 +19,25 @@
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse)
+library(sf)
+library(rnaturalearth)
 
 # Load data --------------------------------------------------------------------
 
 yearly_bound <- readRDS("data/processed/01_bound/allrfmo_year_5deg_longline.rds")
 yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_overlap_cells_longline.rds")
 
+# Load spatial data ------------------------------------------------------------
+
+countries <- ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+)
+
 # PROCESSING ###################################################################
 
 # Harmonize --------------------------------------------------------------------
-yearly_final <- yearly_bound |>
+yearly <- yearly_bound |>
 
   # Mark overlapping cells
   left_join(
@@ -59,6 +68,19 @@ yearly_final <- yearly_bound |>
 
   ungroup() |>
   select(-overlap, -max_mt, -max_n)
+
+# Remove points that fall on land ----------------------------------------------
+
+yearly_final <- yearly |>
+  st_as_sf(
+    coords = c("lon", "lat"),
+    crs = 4326,
+    remove = FALSE
+  ) |>
+  filter(
+    lengths(st_within(geometry, countries)) == 0
+  ) |>
+  st_drop_geometry()
 
 # EXPORT #######################################################################
 

@@ -19,11 +19,20 @@
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse)
+library(sf)
+library(rnaturalearth)
 
 # Load data --------------------------------------------------------------------
 
 monthly_bound <- readRDS("data/processed/01_bound/allrfmo_month_5deg_longline.rds")
 monthly_overlap_cells <- readRDS("data/processed/01_bound/monthly_overlap_cells_longline.rds")
+
+# Load spatial data ------------------------------------------------------------
+
+countries <- ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+)
 
 # PROCESSING ###################################################################
 
@@ -73,7 +82,7 @@ monthly_overlap_cells <- readRDS("data/processed/01_bound/monthly_overlap_cells_
 # close by decimals
 
 # Harmonize --------------------------------------------------------------------
-monthly_final <- monthly_bound |>
+monthly <- monthly_bound |>
 
   # Mark overlapping cells
   left_join(
@@ -104,6 +113,19 @@ monthly_final <- monthly_bound |>
 
   ungroup() |>
   select(-overlap, -max_mt, -max_n)
+
+# Remove points that fall on land ----------------------------------------------
+
+monthly_final <- monthly |>
+  st_as_sf(
+    coords = c("lon", "lat"),
+    crs = 4326,
+    remove = FALSE
+  ) |>
+  filter(
+    lengths(st_within(geometry, countries)) == 0
+  ) |>
+  st_drop_geometry()
 
 # EXPORT #######################################################################
 
