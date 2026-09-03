@@ -20,16 +20,25 @@
 
 # Load packages ----------------------------------------------------------------
 library(tidyverse)
+library(sf)
+library(rnaturalearth)
 
 # Load data --------------------------------------------------------------------
 
 yearly_bound <- readRDS("data/processed/01_bound/allrfmo_year_5deg_longline_flag.rds")
 yearly_overlap_cells <- readRDS("data/processed/01_bound/yearly_flag_overlap_cells_longline.rds")
 
+# Load spatial data ------------------------------------------------------------
+
+countries <- ne_countries(
+  scale = "medium",
+  returnclass = "sf"
+)
+
 # PROCESSING ###################################################################
 
 # Harmonize --------------------------------------------------------------------
-yearly_final <- yearly_bound |>
+yearly_flag <- yearly_bound |>
 
   # Mark overlapping cells
   left_join(
@@ -61,7 +70,20 @@ yearly_final <- yearly_bound |>
   ungroup() |>
   select(-overlap, -max_mt, -max_n)
 
+# Remove points that fall on land ----------------------------------------------
+
+yearly_flag_final <- yearly_flag |>
+  st_as_sf(
+    coords = c("lon", "lat"),
+    crs = 4326,
+    remove = FALSE
+  ) |>
+  filter(
+    lengths(st_within(geometry, countries)) == 0
+  ) |>
+  st_drop_geometry()
+
 # EXPORT #######################################################################
 
-saveRDS(yearly_final, "data/output/allrfmo_year_5deg_longline_flag.rds")
+saveRDS(yearly_flag_final, "data/output/allrfmo_year_5deg_longline_flag.rds")
 
